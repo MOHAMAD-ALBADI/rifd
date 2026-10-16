@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { SLIDES } from '../data/content';
-import { SLIDE_COMPONENTS } from '../slides';
+import { SLIDE_COMPONENTS } from '../scenes';
 import { EnvCtx, SlideCtx, STAGE_H, STAGE_W, useMode, useReducedMotion, useStageScale } from '../lib/env';
 import { DeckCtx } from '../lib/deck';
 import { slideVariants } from '../lib/motion';
@@ -151,9 +151,7 @@ export function PresentationLayout() {
     <EnvCtx.Provider value={env}>
       <DeckCtx.Provider value={deck}>
         <MotionConfig reducedMotion={reducedPref ? 'always' : 'never'}>
-          {mode === 'print' ? (
-            <PrintDeck />
-          ) : mode === 'stage' ? (
+          {mode === 'stage' ? (
             <div className="fixed inset-0 overflow-hidden" dir="rtl">
               <Background />
               <div className="absolute left-1/2 top-1/2" style={{ width: STAGE_W, height: STAGE_H, transform: `translate(-50%, -50%) scale(${scale})`, perspective: 1600 }}>
@@ -189,7 +187,7 @@ export function PresentationLayout() {
           ) : (
             <FlowDeck index={index} goTo={goTo} openOverview={() => setOverview(true)} overview={overview} closeOverview={() => setOverview(false)} />
           )}
-          {mode !== 'print' && <Loader onDone={() => setReady(true)} />}
+          <Loader onDone={() => setReady(true)} />
         </MotionConfig>
       </DeckCtx.Provider>
     </EnvCtx.Provider>
@@ -201,7 +199,7 @@ function FlowDeck({ index, goTo, openOverview, overview, closeOverview }: { inde
   return (
     <div dir="rtl">
       <SectionProgress index={index} total={TOTAL} />
-      <button onClick={openOverview} className="no-print focus-ring fixed left-4 top-4 z-40 rounded-full border border-line bg-white/90 px-3 py-1.5 text-sm text-ink shadow-card backdrop-blur">
+      <button onClick={openOverview} className="no-print focus-ring fixed left-4 top-4 z-40 rounded-full border border-white/15 bg-night-deep/80 px-3 py-1.5 text-sm text-snow backdrop-blur">
         <span className="num">{SLIDES[index].no}</span> · الأقسام
       </button>
       {SLIDES.map((s, i) => {
@@ -228,26 +226,3 @@ function FlowSlide({ active, index, children }: { active: boolean; index: number
   );
 }
 
-/** Static print / PDF fallback: every slide on its own 1600×900 page, final states, SVG instead of WebGL. */
-function PrintDeck() {
-  useEffect(() => { document.title = 'RIFD — Pitch (print)'; }, []);
-  return (
-    <div dir="rtl">
-      {SLIDES.map((s, i) => {
-        const C = SLIDE_COMPONENTS[i];
-        return (
-          <section key={s.id} className="print-page relative overflow-hidden" style={{ width: STAGE_W, height: STAGE_H }}>
-            <Background />
-            <div className="absolute inset-0">
-              <SlideCtx.Provider value={{ active: false, index: i }}><C /></SlideCtx.Provider>
-            </div>
-            <div className="absolute bottom-6 left-10 flex items-center gap-3 text-[15px] text-ink-3">
-              <span className="num">{s.no} / {String(SLIDES.length).padStart(2, '0')}</span>
-              <span className="en">RIFD · Techstars Startup Weekend Buraimi City 2026</span>
-            </div>
-          </section>
-        );
-      })}
-    </div>
-  );
-}

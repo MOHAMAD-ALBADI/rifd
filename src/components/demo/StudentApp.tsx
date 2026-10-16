@@ -108,7 +108,7 @@ function narrative(s: S): Narrative {
   switch (s.screen) {
     case 'dashboard': return { ...b, title: 'لوحة سارة', body: 'سارة طالبة علوم حاسوب. اختبارها الأسبوع القادم وتحتاج شرحًا لموضوع صعب.', hint: 'اضغط «اطلب دعمًا» داخل التطبيق' };
     case 'request': return { ...b, title: 'تكتب احتياجها بلغتها', body: 'لا قوائم معقدة: تصف ما تحتاجه، وتحدد الوقت وطريقة الجلسة.', hint: 'جرّب تعديل النص، ثم «إرسال الطلب»' };
-    case 'analysis': return { ...b, title: 'رِفد يفهم الطلب', body: 'يُستخرج المجال والموضوع والمستوى والأولوية، ويُقترح تحضير قصير قبل الجلسة.', agent: 'وكيل الاحتياج + وكيل التعلّم', hint: 'اضغط «عرض المرشدين المناسبين»' };
+    case 'analysis': return { ...b, title: 'رِفد يحدد المادة والموضوع', body: 'يُستخرج المجال والموضوع والأولوية ونوع الدعم. في هذا العرض: قواعد ثابتة محلية، لا نموذج ذكاء اصطناعي.', agent: 'وكيل الاحتياج + وكيل التعلّم', hint: 'اضغط «عرض المرشدين المناسبين»' };
     case 'matches': return { ...b, title: 'أفضل المرشدين لها', body: 'مرتّبون حسب المهارة الموثّقة والتقييم والتوفر — لا حسب من يرد أسرع.', agent: 'وكيل المطابقة', hint: 'افتح ملف أحد المرشدين' };
     case 'profile': return { ...b, title: 'ثقة قبل الحجز', body: 'أدلة مهارة، تقييمات حقيقية من طلبة، ومواعيد متاحة فعلًا.', hint: 'اختر موعدًا ثم «احجز»' };
     case 'booking': return { ...b, title: 'تأكيد بشري للدفع', body: 'المبلغ يُحجز ولا يُحرَّر للمرشد إلا بعد إتمام الجلسة.', agent: 'وكيل التنفيذ', human: 'سارة تؤكد الحجز والدفع بنفسها', hint: 'فعّل التأكيد ثم «تأكيد الحجز»' };
@@ -142,7 +142,7 @@ export function StudentApp() {
   useEffect(() => {
     if (s.screen !== 'analysis' || mode === 'print') return;
     setRevealed(0);
-    const ids = [1, 2, 3, 4, 5].map((k) => window.setTimeout(() => setRevealed(k), 380 * k));
+    const ids = [1, 2, 3, 4, 5].map((k) => window.setTimeout(() => setRevealed(k), 160 * k));
     return () => ids.forEach(clearTimeout);
   }, [s.screen, mode]);
 
@@ -206,7 +206,7 @@ export function StudentApp() {
 
           {s.screen === 'analysis' && a && (
             <div>
-              <h4 className="text-[28px] font-extrabold">فهمنا طلبك</h4>
+              <div className="flex flex-wrap items-center justify-between gap-3"><h4 className="text-[28px] font-extrabold">فهمنا طلبك</h4><span className="rounded-full bg-surface-2 px-3 py-1 text-[15px] font-bold text-ink-3">تحليل محاكى بقواعد ثابتة</span></div>
               <p className="mt-1 line-clamp-1 text-[18px] text-ink-3">«{s.text}»</p>
               <div className="mt-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
                 {[['المجال', CATEGORY_LABEL[a.category]], ['الموضوع', a.topic], ['الأولوية', a.urgency], ['نوع الدعم', a.mode]].map(([k, v], i) => (

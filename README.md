@@ -1,6 +1,6 @@
 # رِفد | RIFD — Interactive Pitch
 
-The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's an Arabic-first, RTL, light-themed browser deck built on a 1920×1080 stage, with a fully interactive student-app MVP and a print/PDF version.
+The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's an Arabic-first, RTL, midnight-navy interactive web presentation on a 1920×1080 stage, with genuine WebGL scenes (React Three Fiber) and a fully interactive two-scenario MVP.
 
 ## Run
 
@@ -34,29 +34,26 @@ The build has no network dependencies. Fonts are bundled, and there are no APIs 
 | R | Replay the current slide's animation |
 | Esc | Close panels |
 
-The mouse wheel and touch swipes also navigate. Deep links `#s1` … `#s11` open a specific slide. Interactive demos have their own **↺ إعادة** (reset) buttons.
+The mouse wheel and touch swipes also navigate. Deep links `#s1` … `#s9` open a specific slide. Interactive demos have their own **↺ إعادة** (reset) buttons.
 
-- **Print / PDF:** open `…/#print`, then print to PDF (1600×900 pages). A ready file is included as `RIFD-Pitch.pdf`.
 - **Phones and narrow windows:** slides stack and scroll vertically.
 - **Reduced motion:** respects the OS setting.
 
-## Section map
+## Section map (9 scenes)
 
-| # | Section | Official topic | Main interaction |
+| # | Scene | Official topic | Centrepiece |
 |---|---|---|---|
-| 01 | Cover | اسم الشركة | 3D card stack cycling request → match → verified outcome |
-| 02 | Problem | المشكلة | Three real-life friction mocks + "كيف يبدو مع رِفد؟" |
-| 03 | Validation | — | Verified NCSI facts + how each hypothesis is tested |
-| 04 | Solution | الحل | Four modules with mini interfaces; selecting one lights its journey steps |
-| 05 | AI agents | — | Each agent: input → action → output, with human-in-the-loop |
-| 06 | MVP | — | 9-screen student app + club design-project scenario |
-| 07 | Market | — | Verified size, entry strategy, bottom-up calculator with presets |
-| 08 | Competition | المنافسون / القيمة المضافة | Three reasons + journey-coverage matrix with sources |
-| 09 | Business model | نموذج العمل التجاري | Who pays (B2C/B2B), session split calculator, full canvas modal |
-| 10 | Roadmap | — | Timeline: achieved vs planned, phase gates |
-| 11 | Team & ask | أعضاء الفريق ومسمياتهم | Team (or execution roles) + ask + closing |
+| 01 | Cover | اسم الشركة | **WebGL** product hero: dashboard device + request, skill and opportunity cards, one camera move |
+| 02 | Problem | المشكلة | Three mini product scenarios; "منظومة واحدة" toggle |
+| 03 | Solution | الحل | Four modules, each with a representative product interface |
+| 04 | Six AI agents | — | **WebGL** service-to-opportunity journey (6 product objects), active agent + human approvals |
+| 05 | Live MVP | — | Scenario A: student support (9 screens). Scenario B: designer → paid club project (7 screens) |
+| 06 | Market & validation | — | Customer groups, verified context, 3-phase entry; revenue logic in a secondary panel |
+| 07 | Competition | المنافسون / القيمة المضافة | Four pillars of RIFD's journey vs. what each alternative publicly states |
+| 08 | Business model | نموذج العمل التجاري | Customer → value → payment for 5 streams; full canvas on demand |
+| 09 | Team & ask | أعضاء الفريق ومسمياتهم | Roadmap, team roles, achieved, the ask; **WebGL** finale resolving into the RIFD mark |
 
-Missing facts are listed in **DATA_CHECKLIST.md**.
+Missing facts are listed in **DATA_CHECKLIST.md**. If WebGL is unavailable (or with `?nogl`), interactive 2D fallbacks render instead.
 
 ## Editing
 
@@ -84,4 +81,4 @@ Every claim carries a `status` (`verified`, `proposed`, `assumption`, `demo`, `p
 
 ## Stack
 
-React 18 · TypeScript · Vite · Tailwind CSS · Framer Motion. No WebGL dependency: depth is CSS 3D, so it runs on any projector laptop.
+React 18 · TypeScript · Vite · Tailwind CSS · Framer Motion · three.js · React Three Fiber · Drei. three.js loads lazily the first time a 3D scene appears; text on 3D cards is real Arabic drawn with the bundled Tajawal font.

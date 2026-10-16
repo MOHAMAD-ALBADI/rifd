@@ -30,7 +30,7 @@ export function AppWindow({ user, nav, activeNav, children, onReset }: {
   user: { name: string; initials: string; role: string }; nav: { key: string; label: string }[]; activeNav: string; children: ReactNode; onReset: () => void;
 }) {
   return (
-    <div className="flex min-h-[640px] flex-col overflow-hidden rounded-[28px] border border-line bg-white shadow-app lg:h-full lg:min-h-0">
+    <div className="flex min-h-[640px] flex-col overflow-hidden rounded-[28px] border border-line bg-white text-ink shadow-app lg:h-full lg:min-h-0">
       {/* top bar */}
       <div className="flex items-center justify-between border-b border-line px-5 py-3 lg:px-6">
         <div className="flex items-center gap-3">
@@ -39,7 +39,7 @@ export function AppWindow({ user, nav, activeNav, children, onReset }: {
           <span className="en ms-2 hidden rounded-full bg-surface-2 px-3 py-1 text-[16px] text-ink-3 sm:inline">rifd.app</span>
         </div>
         <div className="flex items-center gap-3">
-          <StatusBadge status="demo" />
+          <StatusBadge status="simulated" />
           <button onClick={onReset} className="no-print btn-ghost focus-ring px-4 py-1.5 text-[16px]">↺ إعادة</button>
           <span className="hidden items-center gap-2 sm:flex">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-rifd-500 to-rifd-700 text-[17px] font-bold text-white">{user.initials}</span>
@@ -66,41 +66,41 @@ export function AppWindow({ user, nav, activeNav, children, onReset }: {
 export function NarrativePanel({ n, log, showLog, toggleLog }: { n: Narrative; log: LogEntry[]; showLog: boolean; toggleLog: () => void }) {
   return (
     <div className="flex min-h-0 flex-col">
-      <div className="flex items-center justify-between text-[17px] font-bold text-ink-3 lg:text-[20px]">
-        <span>الخطوة <span className="num text-ink">{n.step}</span> من <span className="num">{n.total}</span></span>
+      <div className="flex items-center justify-between text-[17px] font-bold text-fog lg:text-[20px]">
+        <span>الخطوة <span className="num text-snow">{n.step}</span> من <span className="num">{n.total}</span></span>
       </div>
       <div className="mt-2 flex gap-1.5" dir="rtl">
         {Array.from({ length: n.total }, (_, i) => (
-          <span key={i} className={`h-2 flex-1 rounded-full transition-colors duration-500 ${i < n.step ? 'bg-rifd-600' : 'bg-line'}`} />
+          <span key={i} className={`h-2 flex-1 rounded-full transition-colors duration-500 ${i < n.step ? 'bg-teal' : 'bg-white/15'}`} />
         ))}
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div key={n.step + n.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={T.fast} className="mt-6">
-          <h3 className="text-[26px] font-extrabold leading-tight lg:text-[34px]">{n.title}</h3>
-          <p className="mt-3 text-[18px] leading-relaxed text-ink-2 lg:text-[23px]">{n.body}</p>
+      <AnimatePresence initial={false}>
+        <motion.div key={n.step + n.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0 } }} transition={T.fast} className="mt-6">
+          <h3 className="text-[26px] font-extrabold leading-tight lg:text-[38px]">{n.title}</h3>
+          <p className="mt-3 text-[18px] leading-relaxed text-mist lg:text-[25px]">{n.body}</p>
           {n.agent && (
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-[16px] font-bold text-white lg:text-[19px]">
-              <span className="h-2 w-2 rounded-full bg-teal-300" /> {n.agent}
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-[16px] font-bold text-snow lg:text-[19px]">
+              <span className="h-2 w-2 rounded-full bg-teal" /> {n.agent}
             </div>
           )}
           {n.human && (
-            <div className="mt-3 rounded-2xl bg-amber-50 px-4 py-3 text-[16px] font-bold text-amber-700 lg:text-[19px]">إنسان في الحلقة: {n.human}</div>
+            <div className="mt-3 rounded-2xl border border-amber-300/40 bg-amber-300/10 px-4 py-3 text-[16px] font-bold text-amber-200 lg:text-[19px]">إنسان في الحلقة: {n.human}</div>
           )}
-          {n.hint && <p className="mt-5 text-[17px] font-bold text-rifd-600 lg:text-[21px]">{n.hint}</p>}
+          {n.hint && <p className="mt-5 text-[17px] font-bold text-teal-300 lg:text-[21px]">{n.hint}</p>}
         </motion.div>
       </AnimatePresence>
       <div className="mt-auto pt-5">
-        <button onClick={toggleLog} className="no-print focus-ring text-[16px] font-bold text-ink-3 underline-offset-4 hover:underline lg:text-[18px]">
+        <button onClick={toggleLog} className="no-print focus-ring text-[16px] font-bold text-fog underline-offset-4 hover:underline lg:text-[18px]">
           {showLog ? 'إخفاء' : 'عرض'} سجل الوكلاء (<span className="num">{log.length}</span>)
         </button>
         <AnimatePresence>
           {showLog && (
             <motion.ul initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={T.fast}
-              className="scroll-thin mt-2 max-h-[170px] space-y-1.5 overflow-y-auto rounded-2xl border border-line bg-white p-3" data-scroll>
+              className="scroll-thin mt-2 max-h-[170px] space-y-1.5 overflow-y-auto rounded-2xl border border-white/10 bg-night-surface p-3 text-mist" data-scroll>
               {log.map((l, k) => (
                 <li key={k} className="flex gap-2 text-[15px] leading-snug lg:text-[17px]">
-                  <span className="num shrink-0 text-ink-3">{l.t}</span>
-                  <span><b className="text-rifd-700">{l.who}:</b> {l.text}</span>
+                  <span className="num shrink-0 text-fog">{l.t}</span>
+                  <span><b className="text-teal-300">{l.who}:</b> {l.text}</span>
                 </li>
               ))}
             </motion.ul>
@@ -113,7 +113,7 @@ export function NarrativePanel({ n, log, showLog, toggleLog }: { n: Narrative; l
 
 export function Screen({ k, children }: { k: string; children: ReactNode }) {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence initial={false}>
       <motion.div key={k} initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 24 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
         {children}
       </motion.div>

@@ -8,7 +8,12 @@ export default {
         navy: { DEFAULT: '#0B1F3B', 950: '#06142A', 900: '#0B1F3B', 800: '#122B52', 700: '#1B3A6B' },
         rifd: { DEFAULT: '#3B82F6', 50: '#EEF4FF', 100: '#DCE8FE', 200: '#BFD5FD', 300: '#93BBFB', 500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8' },
         teal: { DEFAULT: '#14D1C8', 50: '#E8FBFA', 100: '#C9F5F2', 300: '#6FE8E1', 500: '#14D1C8', 600: '#0FB3AB', 700: '#0A7F7A' },
-        // light system
+        // presentation (midnight navy)
+        night: { DEFAULT: '#0B1F3B', deep: '#071629', surface: '#122B48', raised: '#183A5E' },
+        snow: '#F8FAFF',
+        mist: '#CBD5E1',
+        fog: '#9FB0C8',
+        // light system (used only inside product UI mockups)
         canvas: '#F5F7FC',
         surface: { DEFAULT: '#FFFFFF', 2: '#F0F4FA', 3: '#E6ECF6' },
         line: { DEFAULT: '#E1E7F1', strong: '#C9D3E3' },

@@ -29,7 +29,6 @@ export function useReducedMotion(): boolean {
 }
 
 function computeMode(): Mode {
-  if (location.hash === '#print' || new URLSearchParams(location.search).has('print')) return 'print';
   return window.innerWidth >= 1024 && window.innerHeight >= 540 ? 'stage' : 'flow';
 }
 

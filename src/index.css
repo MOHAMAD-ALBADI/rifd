@@ -33,16 +33,26 @@
   .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border-radius: 999px; border: 1.5px solid #C9D3E3; color: #0B1F3B; font-weight: 600; background: #fff; transition: border-color .2s, background .2s; }
   .btn-ghost:hover { border-color: #3B82F6; background: #EEF4FF; }
   .btn-ghost:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* presentation-level (navy) */
+  .panel { background: linear-gradient(180deg, rgba(24,58,94,.55), rgba(18,43,72,.55)); border: 1px solid rgba(203,213,225,.12); border-radius: 28px; }
+  .btn-deck { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border-radius: 999px; background: #3B82F6; color: #fff; font-weight: 700; transition: background .2s, transform .2s, opacity .2s; }
+  .btn-deck:hover { background: #2563EB; }
+  .btn-deck:active { transform: scale(.98); }
+  .btn-deck:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-deck-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border-radius: 999px; border: 1.5px solid rgba(203,213,225,.28); color: #F8FAFF; font-weight: 600; transition: border-color .2s, background .2s; }
+  .btn-deck-ghost:hover { border-color: #14D1C8; background: rgba(20,209,200,.08); }
+  .btn-deck-ghost:disabled { opacity: .35; cursor: not-allowed; }
 }
 
 @tailwind utilities;
 
-:root { color-scheme: light; }
+:root { color-scheme: dark; }
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  background: #F5F7FC;
-  color: #0B1F3B;
+  background: #071629;
+  color: #F8FAFF;
   font-family: Tajawal, Manrope, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -51,7 +61,7 @@ body {
 body.is-flow { overflow: auto; }
 h1, h2, h3 { text-wrap: balance; }
 
-.accent-text { color: #2563EB; }
+.accent-text { color: #14D1C8; }
 .scroll-thin { scrollbar-width: thin; scrollbar-color: #C9D3E3 transparent; }
 
 @keyframes flow { to { stroke-dashoffset: -24; } }
@@ -63,11 +73,3 @@ h1, h2, h3 { text-wrap: balance; }
   .flow-dash, .pulse-soft { animation: none !important; }
 }
 
-/* ---------------------------------------------------------- print / PDF */
-@page { size: 1920px 1080px; margin: 0; }
-@media print {
-  html, body, #root { height: auto; overflow: visible; }
-  .no-print { display: none !important; }
-  .print-page { break-after: page; page-break-after: always; }
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-}
