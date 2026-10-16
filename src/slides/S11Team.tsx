@@ -1,60 +1,57 @@
 import { motion } from 'framer-motion';
 import { SLIDES, TEAM } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
-import { BrandLogo, Item, SponsorLogoStrip, StatusBadge, Stagger, useInitial } from '../components/primitives';
+import { BrandLogo, Item, SponsorLogoStrip, Stagger, useInitial } from '../components/primitives';
 import { T } from '../lib/motion';
 
 export default function S11Team() {
   const initial = useInitial();
+  const hasTeam = TEAM.members.length > 0;
   return (
-    <SlideFrame meta={SLIDES[10]} title={TEAM.headline} accent={['واقع.']} titleClass="lg:!text-[2.7rem]">
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
-        <Stagger className="grid grid-cols-1 gap-3 sm:grid-cols-2" delay={0.4} step={0.08}>
-          {TEAM.members.map((m, i) => (
-            <Item key={i} className={`relative rounded-2xl p-4 lg:p-5 ${m.placeholder ? 'border-2 border-dashed border-white/15 bg-white/[0.02]' : 'card-d'}`}>
-              <div className="flex items-center gap-3">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rifd/40 to-teal/40 text-lg font-bold text-white/80">{m.placeholder ? '؟' : m.name.slice(0, 1)}</span>
-                <div className="min-w-0">
-                  <div className={`text-lg font-bold ${m.placeholder ? 'text-white/45' : ''}`}>{m.name}</div>
-                  <div className="text-sm text-teal-300">{m.role}</div>
-                </div>
-              </div>
-              <div className={`mt-3 text-sm ${m.placeholder ? 'text-white/35' : 'text-white/65'}`}>{m.capability}</div>
-              <div className="mt-1 text-sm text-white/60"><span className="text-white/40">خلال التنفيذ:</span> {m.duty}</div>
-              {m.placeholder && <StatusBadge status="placeholder" className="absolute left-3 top-3" />}
-            </Item>
-          ))}
-        </Stagger>
+    <SlideFrame meta={SLIDES[10]} title={TEAM.headline} accent={['التالية']}>
+      <div className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8">
+        <div className="flex flex-col gap-5">
+          <h3 className="text-[20px] font-extrabold text-ink-2 lg:text-[26px]">{hasTeam ? 'الفريق' : 'الأدوار خلال التنفيذ'}</h3>
+          <Stagger className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5" delay={0.3} step={0.08}>
+            {hasTeam
+              ? TEAM.members.map((m) => (
+                  <Item key={m.name} className="card flex flex-col p-6">
+                    <span className="grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-rifd-500 to-rifd-700 text-[26px] font-bold text-white">{m.name.slice(0, 1)}</span>
+                    <div className="mt-4 text-[24px] font-extrabold lg:text-[30px]">{m.name}</div>
+                    <div className="text-[18px] font-bold text-rifd-600 lg:text-[22px]">{m.role}</div>
+                    <p className="mt-2 text-[17px] text-ink-2 lg:text-[20px]">{m.capability}</p>
+                  </Item>
+                ))
+              : TEAM.roles.map((r, i) => (
+                  <Item key={r.role} className="card flex flex-col p-6 lg:p-7">
+                    <span className="num text-[18px] font-bold text-rifd-600 lg:text-[20px]">0{i + 1}</span>
+                    <div className="mt-2 text-[22px] font-extrabold leading-tight lg:text-[30px]">{r.role}</div>
+                    <p className="mt-2 text-[17px] leading-relaxed text-ink-2 lg:text-[22px]">{r.duty}</p>
+                  </Item>
+                ))}
+          </Stagger>
+        </div>
 
-        <div className="flex min-h-0 flex-col gap-4">
-          <div className="card-d p-5">
-            <div className="label text-teal">THE ASK</div>
-            <div className="mt-1 text-xl font-bold">{TEAM.askTitle}</div>
-            <div className="mt-3 space-y-2.5">
+        <div className="flex flex-col gap-5">
+          <div className="card p-6 lg:p-7">
+            <h3 className="text-[20px] font-extrabold lg:text-[26px]">ما نطلبه للخطوة التالية</h3>
+            <div className="mt-4 space-y-4">
               {TEAM.asks.map((a) => (
                 <div key={a.title} className="flex items-start gap-3">
-                  <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-teal" />
-                  <div>
-                    <div className="font-bold">{a.title}</div>
-                    <div className={`text-sm ${a.placeholder ? 'text-white/40' : 'text-white/60'}`}>{a.line}</div>
-                  </div>
+                  <span className="mt-2.5 h-3 w-3 shrink-0 rounded-full bg-rifd-600" />
+                  <div><div className="text-[20px] font-extrabold lg:text-[26px]">{a.title}</div><div className="text-[17px] text-ink-2 lg:text-[21px]">{a.line}</div></div>
                 </div>
               ))}
             </div>
           </div>
-          <motion.div initial={initial === false ? false : { opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ ...T.slow, delay: 0.8 }}
-            className="relative flex flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-teal/25 bg-gradient-to-br from-navy-700 to-navy-950 p-6">
-            <div className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-teal/20 blur-3xl" />
-            <BrandLogo size={54} />
-            <p className="relative mt-4 text-[1.55rem] font-extrabold leading-snug lg:text-[1.9rem]">
-              <span className="text-grad">رِفد</span> — لأن المهارات لا ينبغي أن تبقى فرصًا ضائعة.
-            </p>
+          <motion.div initial={initial === false ? false : { opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ ...T.slow, delay: 0.6 }}
+            className="flex flex-1 flex-col justify-center rounded-[28px] bg-navy p-7 text-white lg:p-9">
+            <BrandLogo size={64} variant="dark" />
+            <p className="mt-5 text-[28px] font-extrabold leading-snug lg:text-[40px]">{TEAM.closing}</p>
           </motion.div>
         </div>
       </div>
-      <div className="mt-4">
-        <SponsorLogoStrip unit={30} className="justify-between lg:flex-nowrap" />
-      </div>
+      <div className="mt-6"><SponsorLogoStrip unit={34} className="justify-between lg:flex-nowrap" /></div>
     </SlideFrame>
   );
 }

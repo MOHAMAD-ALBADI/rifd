@@ -1,126 +1,74 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { COMPETITION, MARK_LABEL, Mark, SLIDES } from '../data/content';
+import { COMPETITION, JOURNEY_STEPS, SLIDES, Coverage } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
-import { useInitial } from '../components/primitives';
-import { T, EASE } from '../lib/motion';
+import { Item, Stagger, useInitial } from '../components/primitives';
+import { EASE, T } from '../lib/motion';
 
-function MarkIcon({ m }: { m: Mark }) {
-  const base = 'mx-auto grid h-7 w-7 place-items-center rounded-full text-sm font-bold';
-  switch (m) {
-    case 'core': return <span className={`${base} bg-navy text-white`} title={MARK_LABEL[m]}>●</span>;
-    case 'partial': return <span className={`${base} border-2 border-navy/60 text-navy`} title={MARK_LABEL[m]} style={{ background: 'linear-gradient(90deg, #0B1F3B 50%, transparent 50%)' }} />;
-    case 'none': return <span className={`${base} border border-ink/20`} title={MARK_LABEL[m]} />;
-    case 'varies': return <span className={`${base} text-ink-soft`} title={MARK_LABEL[m]}>~</span>;
-    case 'unknown': return <span className={`${base} border border-dashed border-ink/30 text-ink/40`} title={MARK_LABEL[m]}>?</span>;
-    case 'proposed': return <span className={`${base} bg-teal text-navy-950`} title={MARK_LABEL[m]}>◆</span>;
-  }
+function Cell({ c, rifd }: { c: Coverage; rifd: boolean }) {
+  if (c === 'none') return <div className="h-11 rounded-xl border border-dashed border-line-strong/60 lg:h-12" />;
+  return <div className={`h-11 rounded-xl lg:h-12 ${rifd ? 'bg-rifd-600' : c === 'core' ? 'bg-navy/80' : 'bg-navy/25'}`} />;
 }
 
-const MAP: Record<string, { x: number; y: number }> = {
-  uni: { x: 18, y: 18 }, knack: { x: 33, y: 26 }, tutorocean: { x: 28, y: 64 }, riipen: { x: 66, y: 22 }, freelance: { x: 80, y: 78 }, rifd: { x: 84, y: 30 },
-};
-
 export default function S08Competition() {
-  const [view, setView] = useState<'table' | 'map'>('table');
   const [sel, setSel] = useState('knack');
-  const [row, setRow] = useState<number | null>(null);
   const initial = useInitial();
   const p = COMPETITION.players.find((x) => x.key === sel)!;
 
   return (
-    <SlideFrame meta={SLIDES[7]} title={COMPETITION.headline} accent={['تحويلها', 'قيمة.']}>
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
-        <div className="card-l flex min-h-0 flex-col p-4 lg:p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="no-print inline-flex rounded-full bg-paper-200 p-1 text-sm">
-              {([['table', 'جدول المقارنة'], ['map', 'خريطة التموضع']] as const).map(([k, l]) => (
-                <button key={k} onClick={() => setView(k)} className={`focus-ring rounded-full px-4 py-1.5 transition ${view === k ? 'bg-navy text-white' : 'text-ink-soft hover:text-ink'}`}>{l}</button>
-              ))}
-            </div>
-            <div className="hidden flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-soft lg:flex">
-              {(['core', 'partial', 'none', 'unknown', 'proposed'] as Mark[]).map((m) => (
-                <span key={m} className="flex items-center gap-1.5"><span className="scale-[0.7]"><MarkIcon m={m} /></span>{MARK_LABEL[m]}</span>
-              ))}
+    <SlideFrame meta={SLIDES[7]} title={COMPETITION.headline} accent={['رِفد؟']}>
+      <div className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
+        {/* the answer */}
+        <Stagger className="flex flex-col gap-4 lg:gap-5" delay={0.3} step={0.1}>
+          {COMPETITION.reasons.map((r, i) => (
+            <Item key={r.title} className="card flex flex-1 items-start gap-5 p-6 lg:p-7">
+              <span className="num grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rifd-600 text-[22px] font-extrabold text-white lg:h-14 lg:w-14 lg:text-[26px]">{i + 1}</span>
+              <div>
+                <h3 className="text-[22px] font-extrabold leading-tight lg:text-[30px]">{r.title}</h3>
+                <p className="mt-2 text-[17px] leading-relaxed text-ink-2 lg:text-[22px]">{r.line}</p>
+              </div>
+            </Item>
+          ))}
+        </Stagger>
+
+        {/* journey coverage */}
+        <div className="card flex flex-col p-5 lg:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-[20px] font-extrabold lg:text-[26px]">أي جزء من الرحلة يغطيه كل بديل؟</h3>
+            <div className="flex items-center gap-4 text-[15px] text-ink-2 lg:text-[18px]">
+              <span className="flex items-center gap-2"><i className="h-4 w-6 rounded bg-navy/80" />تركيز معلن</span>
+              <span className="flex items-center gap-2"><i className="h-4 w-6 rounded bg-navy/25" />جزئي</span>
+              <span className="flex items-center gap-2"><i className="h-4 w-6 rounded bg-rifd-600" />رِفد (مقترح)</span>
             </div>
           </div>
-
-          <AnimatePresence mode="wait">
-            {view === 'table' ? (
-              <motion.div key="t" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={T.fast} className="min-h-0 flex-1 overflow-x-auto" data-scroll>
-                <table className="w-full min-w-[720px] border-separate border-spacing-0 text-ink">
-                  <thead>
-                    <tr>
-                      <th className="w-[170px]" />
-                      {COMPETITION.players.map((pl) => (
-                        <th key={pl.key} className="px-1 pb-2">
-                          <button onClick={() => setSel(pl.key)} className={`focus-ring w-full rounded-xl px-2 py-2 text-[0.95rem] font-bold transition ${pl.key === 'rifd' ? 'bg-navy text-teal' : sel === pl.key ? 'bg-rifd/10 text-rifd-600' : 'hover:bg-paper-200'}`}>
-                            <span className={pl.key === 'rifd' ? '' : /[a-z]/i.test(pl.name) ? 'en' : ''}>{pl.name}</span>
-                          </button>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {COMPETITION.criteria.map((c, ri) => (
-                      <motion.tr key={c} onMouseEnter={() => setRow(ri)} onMouseLeave={() => setRow(null)}
-                        initial={initial === false ? false : { opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease: EASE, delay: 0.4 + ri * 0.06 }}
-                        className={row === ri ? 'bg-paper-200/70' : ''}>
-                        <td className="rounded-r-lg border-t border-ink/5 py-2.5 pe-3 text-[0.98rem] font-medium">{c}</td>
-                        {COMPETITION.players.map((pl, ci) => (
-                          <td key={pl.key} className={`border-t border-ink/5 py-2.5 ${pl.key === 'rifd' ? 'bg-teal/[0.07]' : ''} ${ci === COMPETITION.players.length - 1 ? 'rounded-l-lg' : ''}`}>
-                            <MarkIcon m={pl.marks[ri]} />
-                          </td>
-                        ))}
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
-                <p className="mt-2 text-xs text-ink-soft">الرموز تعكس الوصف المعلن لكل جهة فقط، ولا تعني غياب الميزة. رِفد: قدرات مقترحة لم تُبنَ بعد.</p>
-              </motion.div>
-            ) : (
-              <motion.div key="m" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={T.fast} className="relative min-h-[320px] flex-1 rounded-xl bg-paper-200/60">
-                <div className="absolute inset-x-6 top-1/2 h-px bg-ink/15" />
-                <div className="absolute inset-y-6 left-1/2 w-px bg-ink/15" />
-                <span className="absolute right-3 top-1/2 -translate-y-6 text-xs text-ink-soft">قياس ودعم التعلّم</span>
-                <span className="absolute left-3 top-1/2 -translate-y-6 text-xs text-ink-soft">تنفيذ وقيمة عملية</span>
-                <span className="absolute left-1/2 top-2 -translate-x-1/2 text-xs text-ink-soft">مؤسسي</span>
-                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-ink-soft">فردي / سوق مفتوح</span>
-                {COMPETITION.players.map((pl, i) => {
-                  const pos = MAP[pl.key];
+          <div className="mt-5 overflow-x-auto" data-scroll>
+            <div className="min-w-[720px]">
+              <div className="grid grid-cols-[200px_repeat(6,1fr)] gap-2 lg:grid-cols-[230px_repeat(6,1fr)]">
+                <div />
+                {JOURNEY_STEPS.map((s) => <div key={s.key} className="pb-1 text-center text-[16px] font-bold text-ink-2 lg:text-[20px]">{s.ar}</div>)}
+              </div>
+              <div className="mt-1 space-y-2">
+                {COMPETITION.players.map((pl, r) => {
                   const isR = pl.key === 'rifd';
                   return (
-                    <motion.button key={pl.key} onClick={() => setSel(pl.key)} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ ...T.spring, delay: i * 0.06 }}
-                      className="focus-ring absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${100 - pos.x}%`, top: `${pos.y}%` }}>
-                      <span className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-bold shadow ${isR ? 'bg-navy text-teal ring-4 ring-teal/25' : sel === pl.key ? 'bg-rifd text-white' : 'bg-white text-ink'}`}>
-                        {isR && <span className="h-2 w-2 rounded-full bg-teal" />}{pl.name}{isR && <span className="text-xs font-normal text-white/60">· الموقع المستهدف</span>}
-                      </span>
+                    <motion.button key={pl.key} onClick={() => setSel(pl.key)}
+                      initial={initial === false ? false : { opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease: EASE, delay: initial === false ? 0 : 0.35 + r * 0.07 }}
+                      className={`focus-ring grid w-full grid-cols-[200px_repeat(6,1fr)] items-center gap-2 rounded-2xl p-1.5 text-right transition lg:grid-cols-[230px_repeat(6,1fr)] ${sel === pl.key ? 'bg-rifd-50 ring-2 ring-rifd-200' : 'hover:bg-surface-2'} ${isR ? 'mt-3' : ''}`}>
+                      <span className={`px-2 text-[18px] font-extrabold lg:text-[22px] ${isR ? 'text-rifd-700' : ''} ${/[a-z]/i.test(pl.name) ? 'en' : ''}`} style={{ textAlign: 'right' }}>{pl.name}</span>
+                      {JOURNEY_STEPS.map((s) => <Cell key={s.key} c={pl.cover[s.key]} rifd={isR} />)}
                     </motion.button>
                   );
                 })}
-                <span className="absolute bottom-2 right-3 text-[0.7rem] text-ink-soft">خريطة مفاهيمية من تقديرنا</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* evidence + positioning */}
-        <div className="flex min-h-0 flex-col gap-4">
+              </div>
+            </div>
+          </div>
           <AnimatePresence mode="wait">
-            <motion.div key={p.key} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={T.fast} className="card-l p-5">
-              <div className="label text-rifd-600">WHAT THEY PUBLICLY STATE</div>
-              <div className="mt-1 text-xl font-bold text-ink">{p.name}</div>
-              <div className="text-sm text-ink-soft">{p.kind}</div>
-              <p className="mt-3 text-[0.98rem] leading-relaxed text-ink">{p.evidence}</p>
-              {p.source && <a href={p.source} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs text-rifd-600 hover:underline">المصدر ↗</a>}
+            <motion.div key={p.key} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={T.fast} className="mt-5 rounded-2xl bg-surface-2 p-4 lg:p-5">
+              <div className="flex flex-wrap items-baseline gap-x-3"><b className="text-[19px] lg:text-[23px]">{p.name}</b><span className="text-[16px] text-ink-3 lg:text-[19px]">{p.kind}</span></div>
+              <p className="mt-1 text-[17px] text-ink-2 lg:text-[21px]">{p.evidence} {p.source && <a href={p.source} target="_blank" rel="noreferrer" className="font-bold text-rifd-600 hover:underline">المصدر ↗</a>}</p>
             </motion.div>
           </AnimatePresence>
-          <div className="rounded-2xl border border-dashed border-ink/20 p-4 text-sm leading-relaxed text-ink-soft">{COMPETITION.assessmentConcept}</div>
-          <div className="relative mt-auto overflow-hidden rounded-2xl bg-navy p-5 text-white">
-            <div className="absolute -left-12 -top-12 h-40 w-40 rounded-full bg-teal/30 blur-3xl" />
-            <div className="label text-teal">OUR POSITIONING</div>
-            <p className="relative mt-2 text-lg font-bold leading-relaxed">{COMPETITION.positioning}</p>
-          </div>
+          <p className="mt-auto pt-3 text-[14px] leading-relaxed text-ink-3 lg:text-[17px]">{COMPETITION.footnote}</p>
         </div>
       </div>
     </SlideFrame>

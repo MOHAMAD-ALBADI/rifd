@@ -11,7 +11,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
-        // three.js stays inside the lazily imported Canvas3D chunk (no eager preload)
         manualChunks: { motion: ['framer-motion'] },
       },
     },

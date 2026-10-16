@@ -1,89 +1,56 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { SLIDES, VALIDATION } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
 import { CountUp, Item, StatusBadge, Stagger } from '../components/primitives';
-import { T } from '../lib/motion';
-
-const TESTS = [
-  'مقابلات مع 15–20 طالبًا: أين يبحثون عن المساعدة اليوم؟ وكم تستغرق؟',
-  'مقابلات مع طلبة يملكون مهارات: هل قدّموا خدمات سابقًا؟ وما العائق؟',
-  'حديث مع جهات الدعم الطلابي: كيف تُتابع البرامج والنتائج حاليًا؟',
-];
 
 export default function S03Validation() {
-  const [open, setOpen] = useState<number | null>(0);
-  const v = VALIDATION.verified;
+  const hasEvidence = VALIDATION.evidence.length > 0;
   return (
-    <SlideFrame meta={SLIDES[2]} title={VALIDATION.headline} accent={['إثبات', 'حجمها.']} sub={VALIDATION.sub}>
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
-        {/* Verified context */}
-        <Stagger className="card-l flex flex-col p-6 lg:p-7" delay={0.4}>
-          <div className="flex items-center justify-between">
-            <span className="label text-ink-soft">VERIFIED CONTEXT · OMAN</span>
-            <StatusBadge status="verified" light />
+    <SlideFrame meta={SLIDES[2]} title={VALIDATION.headline} accent={['بالأدلة.']}>
+      <div className="flex flex-1 flex-col gap-6 lg:gap-8">
+        {/* verified facts */}
+        <div>
+          <div className="mb-3 flex flex-wrap items-center gap-3">
+            <StatusBadge status="verified" />
+            <a href={VALIDATION.sourceUrl} target="_blank" rel="noreferrer" className="text-[16px] text-ink-2 underline-offset-4 hover:underline lg:text-[20px]">{VALIDATION.source} ↗</a>
           </div>
-          <div className="mt-5 grid flex-1 grid-cols-1 gap-5 sm:grid-cols-3 lg:grid-cols-1 lg:gap-0 lg:divide-y lg:divide-ink/10">
-            {v.stats.map((s, i) => (
-              <Item key={i} className="flex items-baseline justify-between gap-4 lg:py-4">
-                <span className="text-base text-ink-soft lg:text-lg">{s.label}</span>
-                <span className="shrink-0 text-[2.3rem] font-bold text-ink lg:text-[3.1rem]" dir="ltr">
+          <Stagger className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-6" delay={0.3}>
+            {VALIDATION.stats.map((s) => (
+              <Item key={s.label} className="card p-6 lg:p-8">
+                <div className="text-[48px] font-extrabold leading-none text-ink lg:text-[88px]" dir="ltr" style={{ textAlign: 'right' }}>
                   <CountUp value={s.value} decimals={s.decimals ?? 0} />
-                  {s.suffix && <span className="num text-teal-700">{s.suffix}</span>}
-                </span>
+                  {s.suffix && <span className="num text-rifd-600">{s.suffix}</span>}
+                </div>
+                <div className="mt-3 text-[18px] text-ink-2 lg:mt-4 lg:text-[26px]">{s.label}</div>
               </Item>
             ))}
-          </div>
-          <a href={v.url} target="_blank" rel="noreferrer" className="mt-4 text-sm text-rifd-600 underline-offset-4 hover:underline">
-            المصدر: {v.source} ↗
-          </a>
-          <p className="mt-2 text-xs text-ink-soft">هذه الأرقام تصف حجم المجتمع المستهدف، لا حجم المشكلة. حجم المشكلة نثبته بالأدلة المقابلة.</p>
-        </Stagger>
+          </Stagger>
+        </div>
 
-        {/* Evidence being collected + hypotheses */}
-        <Stagger className="flex min-h-0 flex-col gap-4" delay={0.55}>
-          <Item className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {/* evidence (appears automatically once collected) */}
+        {hasEvidence && (
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {VALIDATION.evidence.map((e) => (
-              <div key={e.key} className={`rounded-2xl p-4 ${e.value ? 'card-l' : 'border-2 border-dashed border-ink/15 bg-white/50'}`}>
-                <div className="text-sm font-bold text-ink">{e.title}</div>
-                <div className={`mt-2 text-2xl font-bold ${e.value ? 'text-ink' : 'text-ink/30'}`}>{e.value ?? '—'}</div>
-                <div className="mt-1 text-[0.72rem] leading-snug text-ink-soft">{e.hint}</div>
-                {!e.value && <StatusBadge status="placeholder" light className="mt-2" />}
-              </div>
+              <div key={e.label} className="card p-5"><div className="num text-[40px] font-extrabold text-rifd-600">{e.value}</div><div className="text-[20px] text-ink-2">{e.label}</div></div>
             ))}
-          </Item>
+          </div>
+        )}
 
-          <Item className="card-l flex-1 p-5">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="label text-ink-soft">HYPOTHESES · HOW WE TEST</span>
-              <span className="text-xs text-ink-soft">اضغط لعرض طريقة الاختبار</span>
-            </div>
-            <div className="flex flex-col gap-2">
-              {VALIDATION.hypotheses.map((h, i) => (
-                <button key={h.code} onClick={() => setOpen(open === i ? null : i)} className={`focus-ring rounded-xl border p-3 text-right transition ${open === i ? 'border-rifd/30 bg-rifd/[0.05]' : 'border-ink/10 hover:border-ink/20'}`}>
-                  <div className="flex items-start gap-3">
-                    <span className="num mt-0.5 rounded-md bg-navy px-1.5 py-0.5 text-xs font-bold text-teal">{h.code}</span>
-                    <span className="flex-1 text-[0.98rem] leading-relaxed text-ink">{h.text}</span>
-                  </div>
-                  <AnimatePresence initial={false}>
-                    {open === i && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={T.fast} className="overflow-hidden">
-                        <div className="mt-2 border-t border-ink/10 pt-2 text-sm text-ink-soft">الاختبار: {TESTS[i]}</div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </button>
-              ))}
-            </div>
-          </Item>
-
-          <Item className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-bold text-ink">بدائل شائعة نتحقق منها في المقابلات:</span>
-            {VALIDATION.alternatives.map((a) => (
-              <span key={a} className="rounded-full border border-ink/10 bg-white px-3 py-1 text-sm text-ink-soft">{a}</span>
+        {/* how we prove the problem */}
+        <div className="flex-1">
+          <div className="mb-3 flex items-center gap-3">
+            <h3 className="text-[22px] font-extrabold lg:text-[30px]">كيف نثبت المشكلة</h3>
+            <StatusBadge status="planned" />
+          </div>
+          <Stagger className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6" delay={0.55}>
+            {VALIDATION.hypotheses.map((h) => (
+              <Item key={h.code} className="rounded-[24px] border border-line bg-white/70 p-6">
+                <span className="num rounded-lg bg-navy px-2.5 py-1 text-[16px] font-bold text-white lg:text-[18px]">{h.code}</span>
+                <p className="mt-4 text-[19px] font-bold leading-relaxed lg:text-[25px]">{h.text}</p>
+                <p className="mt-3 text-[16px] text-ink-3 lg:text-[20px]">الطريقة: {h.method}</p>
+              </Item>
             ))}
-          </Item>
-        </Stagger>
+          </Stagger>
+        </div>
       </div>
     </SlideFrame>
   );

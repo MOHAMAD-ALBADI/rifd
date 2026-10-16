@@ -1,6 +1,6 @@
 # رِفد | RIFD — Interactive Pitch
 
-The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's an Arabic-first, RTL, browser-based deck with three WebGL scenes, a working MVP demo, and a print/PDF version.
+The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's an Arabic-first, RTL, light-themed browser deck built on a 1920×1080 stage, with a fully interactive student-app MVP and a print/PDF version.
 
 ## Run
 
@@ -37,7 +37,6 @@ The build has no network dependencies. Fonts are bundled, and there are no APIs 
 The mouse wheel and touch swipes also navigate. Deep links `#s1` … `#s11` open a specific slide. Interactive demos have their own **↺ إعادة** (reset) buttons.
 
 - **Print / PDF:** open `…/#print`, then print to PDF (1600×900 pages). A ready file is included as `RIFD-Pitch.pdf`.
-- **No WebGL / older laptop:** the deck switches to SVG fallbacks automatically. Add `?nogl` to force them.
 - **Phones and narrow windows:** slides stack and scroll vertically.
 - **Reduced motion:** respects the OS setting.
 
@@ -45,17 +44,19 @@ The mouse wheel and touch swipes also navigate. Deep links `#s1` … `#s11` open
 
 | # | Section | Official topic | Main interaction |
 |---|---|---|---|
-| 01 | Cover | اسم الشركة | 3D "opportunity dome" (WebGL) |
-| 02 | Problem | المشكلة | 3D disconnected clusters + "ماذا لو اتصلت؟" toggle |
-| 03 | Problem validation | — | Verified NCSI stats, evidence slots, hypotheses |
-| 04 | Solution | الحل | Ecosystem orbit (auto-tour + hover) |
-| 05 | How it works + 6 AI agents | — | Journey stepper bound to 3D agent network |
-| 06 | MVP demo | — | Working request → match → book → complete → verified record; club project mini-demo |
-| 07 | Market | — | TAM/SAM/SOM rings + revenue-logic simulator |
-| 08 | Competition | المنافسون / القيمة المضافة | Comparison table ⇄ positioning map, sourced evidence |
-| 09 | Business model | نموذج العمل التجاري | 9-block canvas + who-pays panel |
-| 10 | Roadmap | — | Phase timeline with milestones / metrics / risks |
-| 11 | Team & ask | أعضاء الفريق ومسمياتهم | Team cards, the ask, closing line |
+| 01 | Cover | اسم الشركة | 3D card stack cycling request → match → verified outcome |
+| 02 | Problem | المشكلة | Three real-life friction mocks + "كيف يبدو مع رِفد؟" |
+| 03 | Validation | — | Verified NCSI facts + how each hypothesis is tested |
+| 04 | Solution | الحل | Four modules with mini interfaces; selecting one lights its journey steps |
+| 05 | AI agents | — | Each agent: input → action → output, with human-in-the-loop |
+| 06 | MVP | — | 9-screen student app + club design-project scenario |
+| 07 | Market | — | Verified size, entry strategy, bottom-up calculator with presets |
+| 08 | Competition | المنافسون / القيمة المضافة | Three reasons + journey-coverage matrix with sources |
+| 09 | Business model | نموذج العمل التجاري | Who pays (B2C/B2B), session split calculator, full canvas modal |
+| 10 | Roadmap | — | Timeline: achieved vs planned, phase gates |
+| 11 | Team & ask | أعضاء الفريق ومسمياتهم | Team (or execution roles) + ask + closing |
+
+Missing facts are listed in **DATA_CHECKLIST.md**.
 
 ## Editing
 
@@ -83,4 +84,4 @@ Every claim carries a `status` (`verified`, `proposed`, `assumption`, `demo`, `p
 
 ## Stack
 
-React 18 · TypeScript · Vite · Tailwind CSS · Framer Motion · three.js · React Three Fiber · Drei. three.js loads lazily, only when a 3D slide first appears.
+React 18 · TypeScript · Vite · Tailwind CSS · Framer Motion. No WebGL dependency: depth is CSS 3D, so it runs on any projector laptop.

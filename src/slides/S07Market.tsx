@@ -1,108 +1,108 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MARKET, SLIDES } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
-import { Item, StatusBadge, Stagger, useInitial } from '../components/primitives';
-import { T, EASE } from '../lib/motion';
+import { CountUp, Item, StatusBadge, Stagger } from '../components/primitives';
+import { EASE } from '../lib/motion';
 
-function Slider({ label, value, min, max, step = 1, unit, onChange }: { label: string; value: number; min: number; max: number; step?: number; unit: string; onChange: (v: number) => void }) {
+type Sim = { students: number; active: number; perSemester: number; ticket: number; commission: number };
+type PresetKey = keyof typeof MARKET.presets;
+
+function Slider({ id, label, value, min, max, step = 1, unit, onChange }: { id: string; label: string; value: number; min: number; max: number; step?: number; unit: string; onChange: (v: number) => void }) {
   return (
-    <label className="block">
-      <div className="flex justify-between text-sm"><span className="text-white/65">{label}</span><span className="num font-bold text-white">{value.toLocaleString('en-US')}<span className="text-white/50"> {unit}</span></span></div>
-      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="mt-1.5 w-full accent-teal" dir="ltr" />
-    </label>
+    <div>
+      <label htmlFor={id} className="flex items-baseline justify-between text-[17px] lg:text-[20px]">
+        <span className="text-ink-2">{label}</span>
+        <b className="text-ink"><span className="num">{value.toLocaleString('en-US')}</span> {unit}</b>
+      </label>
+      <input id={id} type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="mt-2 w-full accent-rifd-600" dir="ltr" />
+    </div>
   );
 }
 
 export default function S07Market() {
-  const [ring, setRing] = useState(0);
-  const [sim, setSim] = useState(MARKET.sim);
-  const initial = useInitial();
-  const tx = Math.round(sim.students * (sim.active / 100) * sim.perSemester);
-  const gmv = tx * sim.ticket;
-  const rev = gmv * (sim.commission / 100);
-  const r = MARKET.rings[ring];
-  const sizes = [100, 66, 36];
+  const [preset, setPreset] = useState<PresetKey | null>('base');
+  const [sim, setSim] = useState<Sim>(() => { const { label, ...v } = MARKET.presets.base; void label; return v; });
+  const set = (patch: Partial<Sim>) => { setPreset(null); setSim((s) => ({ ...s, ...patch })); };
+  const pick = (k: PresetKey) => { const { label, ...v } = MARKET.presets[k]; void label; setPreset(k); setSim(v); };
+
+  const activeStudents = Math.round(sim.students * (sim.active / 100));
+  const services = activeStudents * sim.perSemester;
+  const gmv = services * sim.ticket;
+  const revenue = gmv * (sim.commission / 100);
+  const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
   return (
-    <SlideFrame meta={SLIDES[6]} title={MARKET.headline} accent={['قابلًا', 'للتوسع.']}>
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
-        {/* rings */}
-        <div className="flex min-h-0 flex-col">
-          <div className="grid flex-1 grid-cols-1 items-center gap-6 sm:grid-cols-[1fr_1fr]">
-            <div className="relative mx-auto aspect-square w-full max-w-[400px]">
-              {MARKET.rings.map((x, i) => (
-                <motion.button
-                  key={x.key}
-                  onMouseEnter={() => setRing(i)}
-                  onClick={() => setRing(i)}
-                  initial={initial === false ? false : { scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.9, ease: EASE, delay: 0.35 + i * 0.15 }}
-                  className="focus-ring absolute rounded-full border transition-colors"
-                  style={{
-                    width: `${sizes[i]}%`, height: `${sizes[i]}%`, left: `${(100 - sizes[i]) / 2}%`, bottom: 0,
-                    borderColor: ring === i ? '#14D1C8' : 'rgba(147,187,251,0.25)',
-                    borderStyle: x.status === 'verified' ? 'solid' : 'dashed',
-                    background: ring === i ? 'radial-gradient(circle at 50% 70%, rgba(20,209,200,0.18), rgba(20,209,200,0.03))' : 'rgba(19,44,82,0.25)',
-                  }}
-                  aria-label={x.title}
-                >
-                  <span className="en absolute left-1/2 top-[7%] -translate-x-1/2 text-xs font-bold tracking-[0.2em] text-white/70">{x.code}</span>
-                </motion.button>
-              ))}
+    <SlideFrame meta={SLIDES[6]} title={MARKET.headline} accent={['البريمي،']}>
+      <div className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8">
+        {/* verified + entry strategy */}
+        <div className="flex flex-col gap-5">
+          <div className="card flex flex-wrap items-end justify-between gap-4 p-6 lg:p-7">
+            <div>
+              <div className="text-[52px] font-extrabold leading-none lg:text-[80px]" dir="ltr" style={{ textAlign: 'right' }}><CountUp value={MARKET.verified.value} /></div>
+              <div className="mt-3 text-[19px] text-ink-2 lg:text-[25px]">{MARKET.verified.label}</div>
             </div>
-            <AnimatePresence mode="wait">
-              <motion.div key={r.key} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={T.fast}>
-                <div className="label text-teal">{r.code}</div>
-                <div className={`mt-1 text-[2.6rem] font-bold leading-none lg:text-[3.4rem] ${r.status === 'verified' ? 'text-white' : 'text-white/35'}`}><span className="num">{r.value}</span></div>
-                <div className="mt-2 text-lg font-medium">{r.title}</div>
-                <div className="mt-1 text-sm text-white/55">{r.note}</div>
-                <StatusBadge status={r.status} className="mt-3" />
-              </motion.div>
-            </AnimatePresence>
+            <div className="flex flex-col items-start gap-2">
+              <StatusBadge status="verified" />
+              <span className="text-[15px] text-ink-3 lg:text-[18px]">{MARKET.verified.source}</span>
+            </div>
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-            <span className="text-sm text-white/55">مسار التوسع:</span>
-            {MARKET.expansion.map((e, i) => (
-              <div key={e} className="flex items-center gap-3">
-                <span className={`rounded-full px-3 py-1 text-sm ${i === 0 ? 'bg-teal text-navy-950 font-bold' : 'border border-white/15 text-white/70'}`}>{e}</span>
-                {i < MARKET.expansion.length - 1 && <span className="text-teal/60">←</span>}
-              </div>
-            ))}
-            <span className="ms-auto text-xs text-white/40">بعد إثبات القيمة</span>
-          </div>
-        </div>
-
-        {/* segments + simulator */}
-        <div className="flex min-h-0 flex-col gap-4">
-          <Stagger className="grid grid-cols-2 gap-3" delay={0.5} step={0.07}>
-            {MARKET.segments.map((s) => (
-              <Item key={s.title} className="card-d p-3.5">
-                <div className="font-bold">{s.title}</div>
-                <div className="text-sm text-white/55">{s.line}</div>
+          <Stagger className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3" delay={0.35}>
+            {MARKET.entry.map((e, i) => (
+              <Item key={e.key} className="relative flex flex-col rounded-[24px] border border-line bg-white p-5 lg:p-6">
+                <span className="num text-[16px] font-bold text-rifd-600 lg:text-[18px]">{i + 1}</span>
+                <div className="mt-1 text-[16px] text-ink-3 lg:text-[19px]">{e.title}</div>
+                <div className="mt-1 text-[22px] font-extrabold leading-tight lg:text-[28px]">{e.value}</div>
+                <p className="mt-2 text-[16px] leading-relaxed text-ink-2 lg:text-[19px]">{e.line}</p>
               </Item>
             ))}
           </Stagger>
-          <div className="card-d flex-1 p-5">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="label text-white/45">REVENUE LOGIC SIMULATOR</span>
-              <StatusBadge status="assumption" />
+          <div className="rounded-[24px] bg-navy p-5 text-white lg:p-6">
+            <div className="text-[16px] font-bold text-teal-300 lg:text-[19px]">التوسع حسب الأدلة</div>
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {MARKET.expansion.map((x, i) => (
+                <div key={x.stage} className="flex items-start gap-3">
+                  <span className={`mt-1 h-3 w-3 shrink-0 rounded-full ${i === 0 ? 'bg-teal-300' : 'bg-white/30'}`} />
+                  <div><div className="text-[20px] font-extrabold lg:text-[24px]">{x.where}</div><div className="text-[15px] text-white/75 lg:text-[18px]">بعد: {x.trigger}</div></div>
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
-              <Slider label="طلبة يصلهم رِفد" value={sim.students} min={500} max={20000} step={500} unit="طالب" onChange={(v) => setSim({ ...sim, students: v })} />
-              <Slider label="نسبة النشطين" value={sim.active} min={1} max={40} unit="%" onChange={(v) => setSim({ ...sim, active: v })} />
-              <Slider label="معاملات لكل نشط/فصل" value={sim.perSemester} min={1} max={8} unit="" onChange={(v) => setSim({ ...sim, perSemester: v })} />
-              <Slider label="متوسط قيمة المعاملة" value={sim.ticket} min={2} max={40} unit="ر.ع" onChange={(v) => setSim({ ...sim, ticket: v })} />
-              <Slider label="العمولة" value={sim.commission} min={5} max={20} unit="%" onChange={(v) => setSim({ ...sim, commission: v })} />
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/10 pt-4 text-center">
-              <div><div className="text-xs text-white/50">معاملات/فصل</div><div className="num text-xl font-bold">{tx.toLocaleString('en-US')}</div></div>
-              <div><div className="text-xs text-white/50">قيمة المعاملات</div><div className="num text-xl font-bold">{gmv.toLocaleString('en-US')} <span className="text-sm text-white/50">ر.ع</span></div></div>
-              <div><div className="text-xs text-white/50">إيراد العمولة/فصل</div><div className="num text-xl font-bold text-teal-300">{Math.round(rev).toLocaleString('en-US')} <span className="text-sm text-white/50">ر.ع</span></div></div>
-            </div>
-            <p className="mt-2 text-xs text-white/40">يوضح منطق الإيراد فقط بافتراضات قابلة للتعديل — ليس توقعًا ماليًا. لا يشمل الاشتراكات المؤسسية.</p>
           </div>
+        </div>
+
+        {/* bottom-up revenue logic */}
+        <div className="card flex flex-col p-6 lg:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-[22px] font-extrabold lg:text-[30px]">حساب من الأسفل للأعلى — جامعة واحدة</h3>
+            <StatusBadge status="assumption" />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(Object.keys(MARKET.presets) as PresetKey[]).map((k) => (
+              <button key={k} onClick={() => pick(k)} className={`focus-ring rounded-full border px-5 py-2 text-[17px] font-bold transition lg:text-[19px] ${preset === k ? 'border-navy bg-navy text-white' : 'border-line bg-white text-ink-2 hover:border-rifd-300'}`}>{MARKET.presets[k].label}</button>
+            ))}
+            {preset === null && <span className="self-center text-[16px] text-ink-3 lg:text-[18px]">قيم مخصصة</span>}
+          </div>
+          <div className="mt-5 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+            <Slider id="m-students" label="طلبة الجامعة الشريكة" value={sim.students} min={500} max={10000} step={500} unit="طالب" onChange={(v) => set({ students: v })} />
+            <Slider id="m-active" label="نسبة الطلبة النشطين" value={sim.active} min={1} max={40} unit="%" onChange={(v) => set({ active: v })} />
+            <Slider id="m-per" label="خدمات لكل طالب نشط/فصل" value={sim.perSemester} min={1} max={6} unit="" onChange={(v) => set({ perSemester: v })} />
+            <Slider id="m-ticket" label="متوسط قيمة الخدمة" value={sim.ticket} min={3} max={40} unit="ر.ع" onChange={(v) => set({ ticket: v })} />
+            <Slider id="m-comm" label="عمولة رِفد" value={sim.commission} min={5} max={20} unit="%" onChange={(v) => set({ commission: v })} />
+          </div>
+          <div className="mt-auto grid grid-cols-2 gap-3 pt-6 lg:grid-cols-4">
+            {[
+              ['طلبة نشطون', fmt(activeStudents), ''],
+              ['خدمات مكتملة/فصل', fmt(services), ''],
+              ['قيمة الخدمات', fmt(gmv), 'ر.ع'],
+              ['إيراد رِفد/فصل', fmt(revenue), 'ر.ع'],
+            ].map(([l, v, u], i) => (
+              <motion.div key={l} layout transition={{ duration: 0.3, ease: EASE }} className={`rounded-[20px] p-4 ${i === 3 ? 'bg-rifd-600 text-white' : 'bg-surface-2'}`}>
+                <div className={`text-[15px] lg:text-[18px] ${i === 3 ? 'text-white/85' : 'text-ink-3'}`}>{l}</div>
+                <div className="mt-1 text-[26px] font-extrabold lg:text-[34px]"><span className="num">{v}</span> {u && <span className="text-[16px] lg:text-[20px]">{u}</span>}</div>
+              </motion.div>
+            ))}
+          </div>
+          <p className="mt-3 text-[15px] text-ink-3 lg:text-[18px]">منطق إيراد بافتراضات قابلة للتعديل — ليس توقعًا ماليًا. الاشتراك المؤسسي يُسعَّر بعد التجربة.</p>
         </div>
       </div>
     </SlideFrame>

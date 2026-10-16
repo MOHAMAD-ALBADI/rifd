@@ -1,4 +1,3 @@
-@import '@fontsource/tajawal/300.css';
 @import '@fontsource/tajawal/400.css';
 @import '@fontsource/tajawal/500.css';
 @import '@fontsource/tajawal/700.css';
@@ -6,90 +5,68 @@
 @import '@fontsource/manrope/500.css';
 @import '@fontsource/manrope/600.css';
 @import '@fontsource/manrope/700.css';
+@import '@fontsource/manrope/800.css';
 
 @tailwind base;
 @tailwind components;
+
 @layer components {
-/* Arabic shaping: never letter-space Arabic. Labels in Latin only get tracking. */
-.en { font-family: Manrope, Tajawal, sans-serif; direction: ltr; unicode-bidi: isolate; }
-.label {
-  font-family: Manrope, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  direction: ltr;
-  unicode-bidi: isolate;
-  text-align: right;
-}
-.num { font-family: Manrope, sans-serif; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
-
-.focus-ring:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 10px; }
-button { -webkit-tap-highlight-color: transparent; }
-
-/* Fine hairline card used on dark slides */
-.card-d {
-  background: linear-gradient(180deg, rgba(19, 44, 82, 0.55), rgba(8, 22, 45, 0.55));
-  border: 1px solid rgba(147, 187, 251, 0.14);
-  border-radius: 18px;
-}
-.card-l {
-  background: #fff;
-  border: 1px solid rgba(11, 31, 59, 0.08);
-  border-radius: 18px;
-  box-shadow: 0 1px 0 rgba(11, 31, 59, 0.04), 0 12px 30px -18px rgba(11, 31, 59, 0.25);
-}
-.hair { border-color: rgba(147, 187, 251, 0.14); }
-
+  /* Latin-only identifiers. Arabic is never letter-spaced. */
+  .en { font-family: Manrope, Tajawal, sans-serif; direction: ltr; unicode-bidi: isolate; }
+  .num { font-family: Manrope, sans-serif; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+  .label {
+    font-family: Manrope, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    direction: ltr;
+    unicode-bidi: isolate;
+    text-align: right;
+  }
+  .focus-ring:focus-visible { outline: 3px solid #3B82F6; outline-offset: 3px; border-radius: 14px; }
+  .card { background: #fff; border: 1px solid #E1E7F1; border-radius: 24px; box-shadow: 0 1px 2px rgba(11,31,59,0.04), 0 8px 24px -12px rgba(11,31,59,0.12); }
+  .chip { display: inline-flex; align-items: center; gap: .5em; border-radius: 999px; border: 1px solid #E1E7F1; background: #fff; padding: .35em .9em; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border-radius: 999px; background: #2563EB; color: #fff; font-weight: 700; transition: background .2s, transform .2s, opacity .2s; }
+  .btn-primary:hover { background: #1D4ED8; }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5em; border-radius: 999px; border: 1.5px solid #C9D3E3; color: #0B1F3B; font-weight: 600; background: #fff; transition: border-color .2s, background .2s; }
+  .btn-ghost:hover { border-color: #3B82F6; background: #EEF4FF; }
+  .btn-ghost:disabled { opacity: .35; cursor: not-allowed; }
 }
 
 @tailwind utilities;
 
-:root {
-  --navy: #0b1f3b;
-  --navy-deep: #030b1a;
-  --teal: #14d1c8;
-  --blue: #3b82f6;
-  --paper: #f8faff;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  color-scheme: dark;
-}
-
+:root { color-scheme: light; }
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  background: var(--navy-deep);
-  color: var(--paper);
+  background: #F5F7FC;
+  color: #0B1F3B;
   font-family: Tajawal, Manrope, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow: hidden;
 }
 body.is-flow { overflow: auto; }
+h1, h2, h3 { text-wrap: balance; }
 
-.text-grad {
-  background: linear-gradient(90deg, #6fe8e1, #14d1c8 40%, #3b82f6);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-[dir='rtl'] .text-grad { background: linear-gradient(270deg, #6fe8e1, #14d1c8 40%, #3b82f6); -webkit-background-clip: text; background-clip: text; }
+.accent-text { color: #2563EB; }
+.scroll-thin { scrollbar-width: thin; scrollbar-color: #C9D3E3 transparent; }
 
-.scroll-thin { scrollbar-width: thin; scrollbar-color: rgba(147, 187, 251, 0.25) transparent; }
-
-@keyframes dash { to { stroke-dashoffset: -40; } }
-.flow-dash { stroke-dasharray: 4 8; animation: dash 1.6s linear infinite; }
-@keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.9); opacity: 0; } }
-.pulse-ring { animation: pulse-ring 1.8s var(--ease-out) infinite; }
-@keyframes shimmer { 0% { transform: translateX(120%); } 100% { transform: translateX(-120%); } }
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.flow-dash { stroke-dasharray: 6 6; animation: flow 1.2s linear infinite; }
+@keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.pulse-soft { animation: pulse-soft 1.6s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .flow-dash, .pulse-ring { animation: none !important; }
+  .flow-dash, .pulse-soft { animation: none !important; }
 }
 
-/* ------------------------------------------------------------- print / PDF */
-@page { size: 1600px 900px; margin: 0; }
+/* ---------------------------------------------------------- print / PDF */
+@page { size: 1920px 1080px; margin: 0; }
 @media print {
-  html, body, #root { height: auto; overflow: visible; background: #030b1a; }
+  html, body, #root { height: auto; overflow: visible; }
   .no-print { display: none !important; }
   .print-page { break-after: page; page-break-after: always; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }

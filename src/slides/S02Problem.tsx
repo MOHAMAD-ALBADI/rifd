@@ -2,64 +2,97 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PROBLEM, SLIDES } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
-import { Item, Stagger } from '../components/primitives';
-import { ThreeScene } from '../three/ThreeScene';
-import { ProblemFallback } from '../components/Fallbacks';
+import { Item, StatusBadge, Stagger } from '../components/primitives';
 import { T } from '../lib/motion';
 
-export default function S02Problem() {
-  const [connected, setConnected] = useState(false);
-  const [focus, setFocus] = useState<number | null>(null);
+/* Each friction is shown as the moment a student actually lives it (illustrative mock), not as abstract nodes. */
+
+function ChatMock() {
   return (
-    <SlideFrame meta={SLIDES[1]} title={PROBLEM.headline} accent={['تصل', 'أصحابها']} titleClass="lg:max-w-[1000px]">
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1fr_1.15fr] lg:gap-10">
-        {/* problem cards (RTL: right column) */}
-        <Stagger className="flex flex-col justify-center gap-4" delay={0.5} step={0.12}>
-          {PROBLEM.problems.map((p, i) => (
-            <Item key={p.key}>
-              <button
-                onMouseEnter={() => setFocus(i)}
-                onMouseLeave={() => setFocus(null)}
-                onFocus={() => setFocus(i)}
-                onBlur={() => setFocus(null)}
-                className={`focus-ring card-d relative w-full overflow-hidden p-5 text-right transition lg:p-6 ${focus === i ? 'border-white/30 bg-white/[0.04]' : ''}`}
-              >
-                <span className="absolute inset-y-0 right-0 w-1" style={{ background: p.color }} />
-                <div className="label mb-2" style={{ color: p.color }}>{p.en}</div>
-                <div className="text-xl font-bold lg:text-[1.65rem]">{p.title}</div>
-                <p className="mt-1.5 text-white/65 lg:text-lg">{p.body}</p>
+    <div className="rounded-2xl bg-surface-2 p-4">
+      <div className="flex items-center justify-between text-[16px] text-ink-3 lg:text-[18px]"><span className="font-bold text-ink-2">مجموعة الدفعة</span><span>412 عضو</span></div>
+      <div className="mt-3 max-w-[92%] rounded-2xl rounded-tr-sm bg-white p-3.5 text-[17px] leading-snug shadow-card lg:text-[20px]">أحد يقدر يشرح لي Recursion قبل اختبار الخميس؟</div>
+      <div className="mt-2 text-[15px] text-ink-3 lg:text-[18px]">شوهدت 38 مرة · <span className="font-bold text-amber-700">بلا رد منذ يومين</span></div>
+    </div>
+  );
+}
+
+function ProfileMock() {
+  return (
+    <div className="rounded-2xl bg-surface-2 p-4">
+      <div className="flex items-center gap-3">
+        <span className="grid h-11 w-11 place-items-center rounded-full bg-teal-600 text-[18px] font-bold text-white">ن</span>
+        <div><div className="text-[17px] font-bold lg:text-[20px]">نور · تصميم ومونتاج</div><div className="text-[15px] text-ink-3 lg:text-[18px]">حساب شخصي</div></div>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+        {[['0', 'طلبات'], ['0', 'عملاء'], ['—', 'خبرة موثّقة']].map(([v, l]) => (
+          <div key={l} className="rounded-xl bg-white py-2"><div className="num text-[22px] font-extrabold text-ink-3 lg:text-[26px]">{v}</div><div className="text-[14px] text-ink-3 lg:text-[16px]">{l}</div></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ScatterMock() {
+  const items = [['بريد الجامعة', 'ورشة تصميم واجهات'], ['ملصق', 'مسابقة برمجة'], ['إنستغرام', 'تدريب صيفي'], ['واتساب', 'مشروع لنادٍ']];
+  return (
+    <div className="grid grid-cols-2 gap-2 rounded-2xl bg-surface-2 p-4">
+      {items.map(([c, t], i) => (
+        <div key={c} className="rounded-xl bg-white p-2.5 shadow-card" style={{ transform: `rotate(${[-2, 1.5, 1, -1.5][i]}deg)` }}>
+          <div className="text-[14px] font-bold text-ink-3 lg:text-[16px]">{c}</div>
+          <div className="text-[16px] leading-snug lg:text-[19px]">{t}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const MOCKS = [ChatMock, ProfileMock, ScatterMock];
+
+export default function S02Problem() {
+  const [solved, setSolved] = useState(false);
+  return (
+    <SlideFrame meta={SLIDES[1]} title={PROBLEM.headline} accent={['يلتقيان.']}
+      aside={<StatusBadge status="demo" />}>
+      <Stagger className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8" delay={0.35} step={0.12}>
+        {PROBLEM.frictions.map((f, i) => {
+          const Mock = MOCKS[i];
+          return (
+            <Item key={f.key} className="card flex flex-col p-6 lg:p-8">
+              <div className="text-[16px] font-bold text-rifd-600 lg:text-[20px]">{f.who}</div>
+              <div className="relative mt-3">
+                <Mock />
                 <AnimatePresence>
-                  {connected && (
-                    <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={T.fast}
-                      className="absolute left-4 top-4 rounded-full bg-teal/15 px-2.5 py-0.5 text-xs text-teal-300">
-                      متصل عبر رِفد
-                    </motion.span>
+                  {solved && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={T.fast} className="absolute inset-0 grid place-items-center rounded-2xl bg-white/80 backdrop-blur-[2px]">
+                      <span className="grid h-16 w-16 place-items-center rounded-full bg-teal-50 text-[32px] text-teal-700">✓</span>
+                    </motion.div>
                   )}
                 </AnimatePresence>
-              </button>
+              </div>
+              <h3 className="mt-6 text-[24px] font-extrabold leading-tight lg:text-[34px]">{f.title}</h3>
+              <AnimatePresence mode="wait">
+                {solved ? (
+                  <motion.p key="fix" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={T.fast} className="mt-3 rounded-2xl bg-rifd-50 p-4 text-[18px] font-bold leading-relaxed text-rifd-700 lg:text-[24px]">
+                    مع رِفد: {f.fix}
+                  </motion.p>
+                ) : (
+                  <motion.p key="line" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={T.fast} className="mt-3 text-[18px] leading-relaxed text-ink-2 lg:text-[24px]">
+                    {f.line}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </Item>
-          ))}
-        </Stagger>
-
-        {/* spatial visual */}
-        <div className="relative min-h-[320px] overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent">
-          <ThreeScene scene="problem" props={{ connected }} fallback={<ProblemFallback connected={connected} />} />
-          <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between p-4 text-xs text-white/60 lg:p-5 lg:text-sm">
-            <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-rifd" />طلبة يحتاجون دعمًا</span>
-            <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-teal" />طلبة موهوبون</span>
-          </div>
-          <div className="pointer-events-none absolute bottom-[72px] left-4 text-xs text-white/60 lg:left-5 lg:text-sm">
-            <span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-rifd-300" />برامج ومشاريع متفرقة</span>
-          </div>
-          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 border-t border-white/10 bg-navy-950/60 p-3 backdrop-blur lg:p-4">
-            <span className="text-sm text-white/60">
-              {connected ? 'منظومة واحدة: كل مجموعة تصل إلى الأخرى عبر نواة مشتركة.' : 'روابط مقطوعة: الاحتكاك يضيّع الفرص.'}
-            </span>
-            <button onClick={() => setConnected((c) => !c)} className="no-print focus-ring shrink-0 rounded-full bg-teal px-4 py-2 text-sm font-bold text-navy-950 transition hover:bg-teal-300">
-              {connected ? PROBLEM.toggleOn : PROBLEM.toggleOff}
-            </button>
-          </div>
-        </div>
+          );
+        })}
+      </Stagger>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 lg:mt-8">
+        <p className="text-[18px] font-bold text-ink lg:text-[26px]">
+          {solved ? 'احتياج واحد ← مطابقة ← خدمة ← نتيجة موثّقة.' : 'النتيجة اليوم: وقت ضائع، جودة غير مضمونة، ومهارات لا تُستثمر.'}
+        </p>
+        <button onClick={() => setSolved((s) => !s)} className="no-print btn-primary focus-ring px-7 py-3.5 text-[18px] lg:text-[22px]">
+          {solved ? 'العودة إلى الواقع الحالي' : 'كيف يبدو مع رِفد؟'}
+        </button>
       </div>
     </SlideFrame>
   );
