@@ -1,0 +1,96 @@
+@import '@fontsource/tajawal/300.css';
+@import '@fontsource/tajawal/400.css';
+@import '@fontsource/tajawal/500.css';
+@import '@fontsource/tajawal/700.css';
+@import '@fontsource/tajawal/800.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+
+@tailwind base;
+@tailwind components;
+@layer components {
+/* Arabic shaping: never letter-space Arabic. Labels in Latin only get tracking. */
+.en { font-family: Manrope, Tajawal, sans-serif; direction: ltr; unicode-bidi: isolate; }
+.label {
+  font-family: Manrope, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: right;
+}
+.num { font-family: Manrope, sans-serif; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+
+.focus-ring:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 10px; }
+button { -webkit-tap-highlight-color: transparent; }
+
+/* Fine hairline card used on dark slides */
+.card-d {
+  background: linear-gradient(180deg, rgba(19, 44, 82, 0.55), rgba(8, 22, 45, 0.55));
+  border: 1px solid rgba(147, 187, 251, 0.14);
+  border-radius: 18px;
+}
+.card-l {
+  background: #fff;
+  border: 1px solid rgba(11, 31, 59, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 1px 0 rgba(11, 31, 59, 0.04), 0 12px 30px -18px rgba(11, 31, 59, 0.25);
+}
+.hair { border-color: rgba(147, 187, 251, 0.14); }
+
+}
+
+@tailwind utilities;
+
+:root {
+  --navy: #0b1f3b;
+  --navy-deep: #030b1a;
+  --teal: #14d1c8;
+  --blue: #3b82f6;
+  --paper: #f8faff;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--navy-deep);
+  color: var(--paper);
+  font-family: Tajawal, Manrope, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+body.is-flow { overflow: auto; }
+
+.text-grad {
+  background: linear-gradient(90deg, #6fe8e1, #14d1c8 40%, #3b82f6);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+[dir='rtl'] .text-grad { background: linear-gradient(270deg, #6fe8e1, #14d1c8 40%, #3b82f6); -webkit-background-clip: text; background-clip: text; }
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: rgba(147, 187, 251, 0.25) transparent; }
+
+@keyframes dash { to { stroke-dashoffset: -40; } }
+.flow-dash { stroke-dasharray: 4 8; animation: dash 1.6s linear infinite; }
+@keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.9); opacity: 0; } }
+.pulse-ring { animation: pulse-ring 1.8s var(--ease-out) infinite; }
+@keyframes shimmer { 0% { transform: translateX(120%); } 100% { transform: translateX(-120%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-dash, .pulse-ring { animation: none !important; }
+}
+
+/* ------------------------------------------------------------- print / PDF */
+@page { size: 1600px 900px; margin: 0; }
+@media print {
+  html, body, #root { height: auto; overflow: visible; background: #030b1a; }
+  .no-print { display: none !important; }
+  .print-page { break-after: page; page-break-after: always; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
