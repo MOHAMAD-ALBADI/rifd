@@ -16,8 +16,8 @@ The build has no network dependencies. Fonts are bundled, and there are no APIs 
 ## Deploy to GitHub Pages
 
 1. Push this folder to a GitHub repo.
-2. In the repo, go to **Settings → Pages → Source: GitHub Actions**.
-3. The included workflow `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
+2. In the repo, go to **Settings → Pages → Source: Deploy from a branch → gh-pages / (root)** (one time).
+3. The included workflow `.github/workflows/deploy.yml` builds on every push to `main` and publishes `dist/` to the `gh-pages` branch.
 
 `vite.config.ts` uses `base: './'`, so the site works under any sub-path (for example `user.github.io/rifd/`). You can also upload the contents of `dist/` to any static host.
 
