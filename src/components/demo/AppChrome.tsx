@@ -24,6 +24,8 @@ const NAV_ICONS: Record<string, ReactNode> = {
   record: <path d="M6 3h12v18l-6-4-6 4z" />,
   projects: <path d="M3 7h18v13H3zM8 7V4h8v3" />,
   wallet: <path d="M3 7h18v12H3zM16 13h2M3 7l3-3h12" />,
+  courses: <path d="M12 4 2 9l10 5 10-5-10-5Zm-6 7.5V16c0 1.7 2.7 3 6 3s6-1.7 6-3v-4.5" />,
+  cert: <path d="M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-3 3-1 4 4-2 4 2-1-4" />,
 };
 
 export function AppWindow({ user, nav, activeNav, children, onReset }: {
@@ -39,7 +41,7 @@ export function AppWindow({ user, nav, activeNav, children, onReset }: {
           <span className="en ms-2 hidden rounded-full bg-surface-2 px-3 py-1 text-[16px] text-ink-3 sm:inline">rifd.app</span>
         </div>
         <div className="flex items-center gap-3">
-          <StatusBadge status="simulated" />
+          <StatusBadge status="demo" light />
           <button onClick={onReset} className="no-print btn-ghost focus-ring px-4 py-1.5 text-[16px]">↺ إعادة</button>
           <span className="hidden items-center gap-2 sm:flex">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-rifd-500 to-rifd-700 text-[17px] font-bold text-white">{user.initials}</span>

@@ -4,11 +4,11 @@ These facts are **missing on purpose**. Nothing was invented. Each one lives in 
 
 | # | Item | Where | Slide | Priority |
 |---|---|---|---|---|
-| 1 | **Team names and roles** | `CLOSING.team` | 09 | **Essential.** "أعضاء الفريق ومسمياتهم" is a mandatory official topic. While empty, the slide shows execution roles instead of names. |
-| 2 | Interview / survey results | not shown yet — add to scene 06 once collected | 06 | High. Not invented. |
-| 3 | Funding or support amount for the ask | `CLOSING.ask` | 09 | Optional. Add only if the team confirms one. |
-| 4 | Pilot university (if a letter of interest exists) | `MARKET.phases[0]` | 06 | Optional. Only name a partner with written agreement. |
-| 5 | Institutional subscription price | `BUSINESS.streams[1].assumption` | 08 | Later. Currently "priced after the pilot". |
+| 1 | **Other team members** (names, roles, experience) | `TEAM.members` | 06 | **Essential.** Only Mohammed Al-Badi is listed. Add the rest of the team. |
+| 2 | Interview / survey results | `VALIDATION` (currently a plan with target samples, marked "مخطط") | 07 | High. Replace the plan with real numbers once collected. |
+| 3 | Funding or support amount for the ask | `TEAM.asks` | 09 | Optional. |
+| 4 | Pilot university (with a letter of interest) | `VISION[0]` / `ROADMAP` | 09 | Optional. |
+| 5 | Real prices and costs | `FINANCE` | 04 | The 5-year finance model is an assumption scenario (break-even around year 4). Update it with the team's own figures. |
 
 ## Already verified (keep the sources)
 - 145,885 higher-education students · 39,194 admissions 2024/25 · 47.4% gross enrolment rate. NCSI Education Statistics 2026, via [Muscat Daily, 23 Sep 2026](https://www.muscatdaily.com/2026/09/23/education-sector-expands-as-school-enrolment-grows/).

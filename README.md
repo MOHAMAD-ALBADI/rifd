@@ -2,6 +2,10 @@
 
 The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's an Arabic-first, RTL, midnight-navy interactive web presentation on a 1920×1080 stage, with genuine WebGL scenes (React Three Fiber) and a fully interactive two-scenario MVP.
 
+
+## Slide structure (9)
+01 Cover · 02 Problem (causes + evidence) · 03 Solution (Mini Market, Digital Institute, academic support, AI) · 04 Business Model — tabs: canvas / **5-year finance** (adjustable assumptions, break-even) · 05 Competition · 06 Team · 07 Validation & Market — tabs: validation plan / market size · 08 Interactive MVP — tabs: **Digital Institute** (Leila: course → lessons → project → certificate → opportunity), **Mini Market** (Salem: opportunity → match → contract → delivery → approval), academic support, six AI agents (3D) · 09 Roadmap & Ask — tabs: plan / **5-year vision** / ask.
+
 ## Run
 
 ```bash

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { SLIDES } from '../data/content';
-import { SLIDE_COMPONENTS } from '../scenes';
-import { EnvCtx, SlideCtx, STAGE_H, STAGE_W, useMode, useReducedMotion, useStageScale } from '../lib/env';
+import { SLIDE_COMPONENTS } from '../slides';
+import { EnvCtx, SlideCtx, STAGE_H, STAGE_W, detectWebGL, useMode, useReducedMotion, useStageScale } from '../lib/env';
 import { DeckCtx } from '../lib/deck';
 import { slideVariants } from '../lib/motion';
 import { Background } from './SlideFrame';
@@ -33,8 +33,9 @@ function canScroll(target: EventTarget | null, dy: number): boolean {
 export function PresentationLayout() {
   const mode = useMode();
   const reducedPref = useReducedMotion();
+  const webgl = useMemo(detectWebGL, []);
   const reduced = reducedPref || mode === 'print';
-  const env = useMemo(() => ({ mode, reduced }), [mode, reduced]);
+  const env = useMemo(() => ({ mode, reduced, webgl }), [mode, reduced, webgl]);
 
   const [index, setIndex] = useState(indexFromHash);
   const [dir, setDir] = useState(1);
@@ -146,14 +147,22 @@ export function PresentationLayout() {
   }, [mode]);
 
   const scale = useStageScale(mode === 'stage');
+  const theme = SLIDES[index].theme;
+  const light = theme === 'light';
 
   return (
     <EnvCtx.Provider value={env}>
       <DeckCtx.Provider value={deck}>
         <MotionConfig reducedMotion={reducedPref ? 'always' : 'never'}>
-          {mode === 'stage' ? (
+          {mode === 'print' ? (
+            <PrintDeck />
+          ) : mode === 'stage' ? (
             <div className="fixed inset-0 overflow-hidden" dir="rtl">
-              <Background />
+              <AnimatePresence initial={false}>
+                <motion.div key={theme} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.7 }}>
+                  <Background theme={theme} />
+                </motion.div>
+              </AnimatePresence>
               <div className="absolute left-1/2 top-1/2" style={{ width: STAGE_W, height: STAGE_H, transform: `translate(-50%, -50%) scale(${scale})`, perspective: 1600 }}>
                 <AnimatePresence initial={false} custom={dir}>
                   {ready && (
@@ -175,10 +184,10 @@ export function PresentationLayout() {
                   )}
                 </AnimatePresence>
               </div>
-              <SectionProgress index={index} total={TOTAL} />
-              <TopChrome index={index} />
-              <SlideNavigation index={index} goTo={goTo} />
-              <PresentationControls index={index} total={TOTAL} prev={prev} next={next}
+              <SectionProgress index={index} total={TOTAL} light={light} />
+              <TopChrome index={index} light={light} />
+              <SlideNavigation index={index} goTo={goTo} light={light} />
+              <PresentationControls index={index} total={TOTAL} light={light} prev={prev} next={next}
                 onOverview={() => setOverview(true)} onNotes={() => setNotes((v) => !v)} onReplay={() => setReplay((v) => v + 1)}
                 onFullscreen={toggleFull} isFull={isFull} notesOpen={notes} />
               <NotesPanel open={notes} index={index} />
@@ -187,7 +196,7 @@ export function PresentationLayout() {
           ) : (
             <FlowDeck index={index} goTo={goTo} openOverview={() => setOverview(true)} overview={overview} closeOverview={() => setOverview(false)} />
           )}
-          <Loader onDone={() => setReady(true)} />
+          {mode !== 'print' && <Loader onDone={() => setReady(true)} />}
         </MotionConfig>
       </DeckCtx.Provider>
     </EnvCtx.Provider>
@@ -196,17 +205,18 @@ export function PresentationLayout() {
 
 /** Phones / small windows: natural vertical scroll, each section lazily activated. */
 function FlowDeck({ index, goTo, openOverview, overview, closeOverview }: { index: number; goTo: (i: number) => void; openOverview: () => void; overview: boolean; closeOverview: () => void }) {
+  const light = SLIDES[index].theme === 'light';
   return (
     <div dir="rtl">
-      <SectionProgress index={index} total={TOTAL} />
-      <button onClick={openOverview} className="no-print focus-ring fixed left-4 top-4 z-40 rounded-full border border-white/15 bg-night-deep/80 px-3 py-1.5 text-sm text-snow backdrop-blur">
+      <SectionProgress index={index} total={TOTAL} light={light} />
+      <button onClick={openOverview} className={`no-print focus-ring fixed left-4 top-4 z-40 rounded-full border px-3 py-1.5 text-sm backdrop-blur ${light ? 'border-ink/10 bg-white/80 text-ink' : 'border-white/15 bg-navy-950/70 text-white'}`}>
         <span className="num">{SLIDES[index].no}</span> · الأقسام
       </button>
       {SLIDES.map((s, i) => {
         const C = SLIDE_COMPONENTS[i];
         return (
           <section key={s.id} id={s.id} className="relative min-h-[100svh] overflow-hidden">
-            <div className="absolute inset-0"><Background /></div>
+            <div className="absolute inset-0"><Background theme={s.theme} /></div>
             <FlowSlide active={i === index} index={i}><C /></FlowSlide>
           </section>
         );
@@ -226,3 +236,26 @@ function FlowSlide({ active, index, children }: { active: boolean; index: number
   );
 }
 
+/** Static print / PDF fallback: every slide on its own 1600×900 page, final states, SVG instead of WebGL. */
+function PrintDeck() {
+  useEffect(() => { document.title = 'RIFD — Pitch (print)'; }, []);
+  return (
+    <div dir="rtl">
+      {SLIDES.map((s, i) => {
+        const C = SLIDE_COMPONENTS[i];
+        return (
+          <section key={s.id} className="print-page relative overflow-hidden" style={{ width: STAGE_W, height: STAGE_H }}>
+            <Background theme={s.theme} />
+            <div className="absolute inset-0">
+              <SlideCtx.Provider value={{ active: false, index: i }}><C /></SlideCtx.Provider>
+            </div>
+            <div className="absolute bottom-5 left-8 flex items-center gap-3 text-xs" style={{ color: s.theme === 'light' ? '#4A5B78' : 'rgba(255,255,255,.5)' }}>
+              <span className="num">{s.no} / {String(SLIDES.length).padStart(2, '0')}</span>
+              <span className="en">RIFD · Techstars Startup Weekend Buraimi City 2026</span>
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
