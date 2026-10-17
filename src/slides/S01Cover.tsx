@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { COVER, SLIDES } from '../data/content';
+import { COVER, SLIDES, TEAM } from '../data/content';
 import { AnimatedHeading, BrandLogo, SponsorLogoStrip, useInitial } from '../components/primitives';
 import { ThreeScene } from '../three/ThreeScene';
 import { CoverFallback } from '../components/Fallbacks';
@@ -9,7 +9,7 @@ import { useDeck } from '../lib/deck';
 export default function S01Cover({ bare = false }: { bare?: boolean }) {
   const initial = useInitial();
   const { goTo } = useDeck();
-  const demoIndex = SLIDES.findIndex((s) => s.id === 's6');
+  const demoIndex = SLIDES.findIndex((s) => s.id === 's8');
   const show = (delay: number) => ({ initial: initial === false ? false : { opacity: 0, y: 18 }, animate: { opacity: 1, y: 0 }, transition: { ...T.slow, delay } });
 
   return (
@@ -39,7 +39,7 @@ export default function S01Cover({ bare = false }: { bare?: boolean }) {
         <motion.p {...show(0.75)} className="mt-5 max-w-[620px] text-lg leading-relaxed text-white/75 lg:text-[1.55rem] lg:leading-[1.6]">
           {COVER.statement}
         </motion.p>
-        <motion.div {...show(0.85)} className="mt-5 flex items-center gap-3 text-[18px] text-white/70"><span className="h-2 w-2 rounded-full bg-teal" />فريق رِفد · <span className="en">Techstars Startup Weekend Buraimi 2026</span></motion.div>
+        <motion.div {...show(0.85)} className="mt-5 flex items-center gap-3 text-[18px] text-white/70"><span className="h-2 w-2 rounded-full bg-teal" />فريق رِفد: {TEAM.members.map((m) => m.name.split(' ')[0] + ' ' + m.name.split(' ').slice(-1)[0]).join(' · ')}</motion.div>
         <motion.div {...show(0.95)} className="no-print mt-8 flex flex-wrap gap-3">
           <button onClick={() => goTo(1)} className="focus-ring group inline-flex items-center gap-3 rounded-full bg-teal px-6 py-3 text-lg font-bold text-navy-950 transition hover:bg-teal-300">
             ابدأ العرض

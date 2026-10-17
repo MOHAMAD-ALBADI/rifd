@@ -89,7 +89,7 @@ export function FinancePanel() {
           <label htmlFor="fin-comm" className="mt-2 flex justify-between text-[17px]"><span className="text-white/70">عمولة رِفد</span><b><span className="num">{comm}</span>%</b></label>
           <input id="fin-comm" type="range" min={10} max={15} value={comm} onChange={(e) => setComm(Number(e.target.value))} className="w-full accent-teal" dir="ltr" />
           <p className="mt-2 text-[15px] leading-relaxed text-white/60">
-            {breakeven >= 0 ? <>التعادل في <b className="text-teal-300">{rows[breakeven].y}</b> بهذه الافتراضات.</> : 'لا يتحقق التعادل خلال 5 سنوات بهذه الافتراضات.'} الأرقام نموذج للتخطيط قابل للتعديل — وليست إيرادات محققة.
+            {breakeven >= 0 ? <>التعادل في <b className="text-teal-300">{rows[breakeven].y}</b> بهذه الافتراضات.</> : 'لا يتحقق التعادل خلال 5 سنوات بهذه الافتراضات.'} الأرقام نموذج للتخطيط قابل للتعديل — وليست إيرادات محققة. يحتسب النموذج ثلاثة مصادر فقط؛ رسوم مشاريع الشركات والإعداد غير مُدرجة (تقدير متحفظ).
           </p>
         </div>
       </div>

@@ -20,7 +20,7 @@ export default function N08MVP() {
   return (
     <SlideFrame meta={SLIDES[7]} title={TITLES[tab]} accent={['شهادة', 'وفرصة.', 'دخل.', 'موثّقة.', 'كاملة.']} titleClass="lg:!text-[2.6rem]"
       aside={<SlideTabs tabs={[['institute', 'المعهد الرقمي'], ['market', 'السوق المصغر'], ['support', 'الدعم الأكاديمي'], ['agents', 'الوكلاء الستة']] as const} value={tab} onChange={setTab} />}>
-      <div className="mb-3 flex items-center gap-3 text-[17px] text-white/65"><StatusBadge status="demo" />نموذج تفاعلي يعمل في المتصفح ببيانات توضيحية — ليس منصة مُطلقة بعد.</div>
+      <div className="mb-3 flex items-center gap-3 text-[17px] text-white/65"><StatusBadge status="demo" />نموذج أولي تفاعلي ببيانات توضيحية — جرّب الرحلة خطوة بخطوة.</div>
       {tab === 'institute' && <InstituteApp key="i" />}
       {tab === 'market' && <DesignerApp key="m" />}
       {tab === 'support' && <StudentApp key="s" />}
