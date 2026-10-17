@@ -10,7 +10,7 @@ export default function S10Roadmap({ bare = false }: { bare?: boolean }) {
   const initial = useInitial();
   const ph = ROADMAP.phases[sel];
   return (
-    <SlideFrame bare={bare} meta={SLIDES[8]} title={ROADMAP.headline} accent={['نتوسع.']}>
+    <SlideFrame bare={bare} meta={SLIDES[7]} title={ROADMAP.headline} accent={['نتوسع.']}>
       <div className="flex min-h-0 flex-1 flex-col justify-center gap-7">
         {/* timeline */}
         <div className="relative grid grid-cols-1 gap-3 lg:grid-cols-[1fr_repeat(4,1.2fr)] lg:gap-4">

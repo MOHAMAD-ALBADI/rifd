@@ -58,7 +58,7 @@ export default function N09Roadmap() {
   const [tab, setTab] = useState<Tab>('plan');
   const titles: Record<Tab, string> = { plan: ROADMAP.headline, vision: 'رؤيتنا خلال خمس سنوات.', ask: 'ما نطلبه للخطوة التالية.' };
   return (
-    <SlideFrame meta={SLIDES[8]} title={titles[tab]} accent={['نتوسع.', 'خمس', 'سنوات.', 'التالية.']}
+    <SlideFrame meta={SLIDES[7]} title={titles[tab]} accent={['نتوسع.', 'خمس', 'سنوات.', 'التالية.']}
       aside={<SlideTabs tabs={[['plan', 'خطة التنفيذ'], ['vision', 'الرؤية · 5 سنوات'], ['ask', 'الطلب']] as const} value={tab} onChange={setTab} />}>
       {tab === 'plan' && <S10Roadmap bare />}
       {tab === 'vision' && <Vision />}

@@ -9,4 +9,4 @@ import N08MVP from './N08MVP';
 import N09Roadmap from './N09Roadmap';
 
 /** Order must match SLIDES in data/content.ts */
-export const SLIDE_COMPONENTS = [S01Cover, S02Problem, S04Solution, N04Business, S08Competition, N06Team, N07Validation, N08MVP, N09Roadmap];
+export const SLIDE_COMPONENTS = [S01Cover, S02Problem, S04Solution, N04Business, S08Competition, N07Validation, N08MVP, N09Roadmap, N06Team];

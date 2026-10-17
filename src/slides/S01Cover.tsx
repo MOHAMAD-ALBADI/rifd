@@ -9,7 +9,7 @@ import { useDeck } from '../lib/deck';
 export default function S01Cover({ bare = false }: { bare?: boolean }) {
   const initial = useInitial();
   const { goTo } = useDeck();
-  const demoIndex = SLIDES.findIndex((s) => s.id === 's8');
+  const demoIndex = SLIDES.findIndex((s) => s.id === 's7');
   const show = (delay: number) => ({ initial: initial === false ? false : { opacity: 0, y: 18 }, animate: { opacity: 1, y: 0 }, transition: { ...T.slow, delay } });
 
   return (

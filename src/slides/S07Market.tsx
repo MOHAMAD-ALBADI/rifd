@@ -25,7 +25,7 @@ export default function S07Market({ bare = false }: { bare?: boolean }) {
   const sizes = [100, 66, 36];
 
   return (
-    <SlideFrame bare={bare} meta={SLIDES[6]} title={MARKET.headline} accent={['قابلًا', 'للتوسع.']}>
+    <SlideFrame bare={bare} meta={SLIDES[5]} title={MARKET.headline} accent={['قابلًا', 'للتوسع.']}>
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         {/* rings */}
         <div className="flex min-h-0 flex-col">

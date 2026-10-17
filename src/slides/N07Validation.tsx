@@ -49,7 +49,7 @@ function ValidationPanel() {
 export default function N07Validation() {
   const [tab, setTab] = useState<'validation' | 'market'>('validation');
   return (
-    <SlideFrame meta={SLIDES[6]} title={tab === 'validation' ? 'المشكلة ليست افتراضًا… وهذه خطة إثباتها.' : 'نبدأ من الجامعات العُمانية… ونبني نموذجًا قابلًا للتوسع.'} accent={['إثباتها.', 'قابلًا', 'للتوسع.']}
+    <SlideFrame meta={SLIDES[5]} title={tab === 'validation' ? 'المشكلة ليست افتراضًا… وهذه خطة إثباتها.' : 'نبدأ من الجامعات العُمانية… ونبني نموذجًا قابلًا للتوسع.'} accent={['إثباتها.', 'قابلًا', 'للتوسع.']}
       aside={<SlideTabs tabs={[['validation', 'التحقق'], ['market', 'حجم السوق']] as const} value={tab} onChange={setTab} />}>
       {tab === 'validation' ? <ValidationPanel /> : <S07Market bare />}
     </SlideFrame>

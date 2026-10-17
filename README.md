@@ -4,7 +4,7 @@ The pitch presentation for **Techstars Startup Weekend Buraimi City 2026**. It's
 
 
 ## Slide structure (9)
-01 Cover · 02 Problem (causes + evidence) · 03 Solution (Mini Market, Digital Institute, academic support, AI) · 04 Business Model — tabs: canvas / **5-year finance** (adjustable assumptions, break-even) · 05 Competition · 06 Team · 07 Validation & Market — tabs: validation plan / market size · 08 Interactive MVP — tabs: **Digital Institute** (Leila: course → lessons → project → certificate → opportunity), **Mini Market** (Salem: opportunity → match → contract → delivery → approval), academic support, six AI agents (3D) · 09 Roadmap & Ask — tabs: plan / **5-year vision** / ask.
+01 Cover · 02 Problem · 03 Solution · 04 Business Model (canvas / 5-year finance) · 05 Competition · 06 Validation & Market · 07 Interactive MVP — the integrated RIFD app (academic support, Mini Market, Digital Institute, wallet, live agent log) + six AI agents (3D); standalone at `app.html` · 08 Roadmap & Ask (plan / 5-year vision / ask) · 09 Team.
 
 ## Run
 

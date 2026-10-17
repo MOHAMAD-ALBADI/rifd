@@ -21,7 +21,7 @@ export default function N08MVP() {
   const flow = mode === 'flow';
 
   return (
-    <SlideFrame meta={SLIDES[7]} title={TITLES[tab]} accent={['وفرصة.', 'كاملة.']} titleClass="lg:!text-[2.6rem]"
+    <SlideFrame meta={SLIDES[6]} title={TITLES[tab]} accent={['وفرصة.', 'كاملة.']} titleClass="lg:!text-[2.6rem]"
       aside={<SlideTabs tabs={[['app', 'التطبيق التفاعلي'], ['agents', 'الوكلاء الستة']] as const} value={tab} onChange={setTab} />}>
       {tab === 'app' && (
         <div className={`grid min-h-0 flex-1 gap-5 ${flow ? 'grid-cols-1' : 'grid-cols-[1fr_340px]'}`}>

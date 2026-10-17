@@ -4,7 +4,7 @@ import { Item, Stagger } from '../components/primitives';
 
 export default function N06Team() {
   return (
-    <SlideFrame meta={SLIDES[5]} title={TEAM.headline} accent={['واقع.']}>
+    <SlideFrame meta={SLIDES[8]} title={TEAM.headline} accent={['واقع.']}>
       <div className="flex min-h-0 flex-1 flex-col justify-center">
         <Stagger className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8" delay={0.4} step={0.1}>
           {TEAM.members.map((m) => (
