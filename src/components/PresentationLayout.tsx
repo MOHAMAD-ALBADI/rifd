@@ -85,6 +85,9 @@ export function PresentationLayout() {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (t && t.tagName === 'SELECT') return;
+      // Inside the interactive MVP only the clicker keys (PageUp/PageDown) drive the deck.
+      if (t?.closest?.('[data-app]') && !['PageDown', 'PageUp'].includes(e.key)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const k = e.key;
       if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(k)) { e.preventDefault(); next(); }
@@ -123,6 +126,7 @@ export function PresentationLayout() {
     let sx = 0, sy = 0;
     const onStart = (e: TouchEvent) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; };
     const onEnd = (e: TouchEvent) => {
+      if ((e.target as HTMLElement)?.closest?.('[data-app]')) return;
       const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
       if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.4) (dx > 0 ? next() : prev()); // RTL: swipe toward the right = forward
       else if (Math.abs(dy) > 90 && !canScroll(e.target, -dy)) (dy < 0 ? next() : prev());

@@ -10,6 +10,7 @@ export default defineConfig({
     target: 'es2020',
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
+      input: { main: 'index.html', app: 'app.html' },
       output: {
         manualChunks: { motion: ['framer-motion'] },
       },
