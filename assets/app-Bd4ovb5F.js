@@ -1,0 +1,1 @@
+import{c as r,u as s,R as o}from"./RifdApp-BJiYZdIh.js";import{j as t,R as n}from"./motion-xIeqVS9P.js";function a(){const e=s({persist:!0});return t.jsx(o,{store:e})}r.createRoot(document.getElementById("app")).render(t.jsx(n.StrictMode,{children:t.jsx(a,{})}));
