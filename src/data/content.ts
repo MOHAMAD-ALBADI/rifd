@@ -1,3 +1,5 @@
+import shahabPhoto from '../assets/team/shahab.jpg';
+import alwaleedPhoto from '../assets/team/alwaleed.jpg';
 /* =============================================================================
    RIFD PITCH — ALL EDITABLE CONTENT LIVES HERE
    -----------------------------------------------------------------------------
@@ -347,13 +349,13 @@ export const TEAM = {
   headline: 'الفريق الذي سيحوّل الفكرة إلى واقع.',
   // Confirmed team (positions = proposed organisational allocation for the pitch).
   members: [
-    { name: 'شهاب حمد عبدالله الكعبي', initials: 'ش', role: 'المؤسس والرئيس التنفيذي', en: 'Founder & CEO',
+    { name: 'شهاب حمد عبدالله الكعبي', initials: 'ش', photo: shahabPhoto, role: 'المؤسس والرئيس التنفيذي', en: 'Founder & CEO',
       duty: 'قيادة المشروع وتوجهه الاستراتيجي، وتطوير الأعمال والشراكات ونمو الشركة' },
     { name: 'عبدالله المعمري', initials: 'ع', role: 'الرئيس التقني', en: 'CTO',
       duty: 'التطوير التقني وبنية المنصة، وتطوير الذكاء الاصطناعي ودمجه' },
-    { name: 'الوليد العميري', initials: 'و', role: 'الرئيس التنفيذي للعمليات', en: 'COO',
+    { name: 'الوليد العميري', initials: 'و', photo: alwaleedPhoto, role: 'الرئيس التنفيذي للعمليات', en: 'COO',
       duty: 'إدارة العمليات وتنسيق الخدمات، وتجربة المستخدم والتنفيذ' },
-  ] as { name: string; initials: string; role: string; en: string; duty: string }[],
+  ] as { name: string; initials: string; photo?: string; role: string; en: string; duty: string }[],
   allocationNote: 'توزيع تنظيمي مقترح لمرحلة الانطلاق',
   askTitle: 'ما نطلبه للخطوة التالية',
   asks: [
