@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SLIDES, VALIDATION } from '../data/content';
+import { SLIDES, VALIDATION, VOICES } from '../data/content';
 import { SlideFrame } from '../components/SlideFrame';
 import { CountUp, Item, SlideTabs, StatusBadge, Stagger } from '../components/primitives';
 import S07Market from './S07Market';
@@ -46,12 +46,38 @@ function ValidationPanel() {
   );
 }
 
-export default function N07Validation() {
-  const [tab, setTab] = useState<'validation' | 'market'>('validation');
+
+function VoicesPanel() {
   return (
-    <SlideFrame meta={SLIDES[5]} title={tab === 'validation' ? 'المشكلة ليست افتراضًا… وهذه خطة إثباتها.' : 'نبدأ من الجامعات العُمانية… ونبني نموذجًا قابلًا للتوسع.'} accent={['إثباتها.', 'قابلًا', 'للتوسع.']}
-      aside={<SlideTabs tabs={[['validation', 'التحقق'], ['market', 'حجم السوق']] as const} value={tab} onChange={setTab} />}>
-      {tab === 'validation' ? <ValidationPanel /> : <S07Market bare />}
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3 text-[16px] text-white/60"><span className="h-2 w-2 rounded-full bg-teal" />{VOICES.note}</div>
+      <Stagger className="grid min-h-0 flex-1 grid-cols-1 gap-3 lg:grid-cols-4" delay={0.3} step={0.05}>
+        {VOICES.items.map((v) => (
+          <Item key={v.name} className={`card-d flex flex-col px-4 py-3 ${v.tone === 'concern' ? 'border-amber-300/25' : ''}`}>
+            <p className="flex-1 text-[15px] leading-[1.6] text-white/85">«{v.text}»</p>
+            <div className="mt-2 flex items-end justify-between gap-2 border-t border-white/10 pt-2">
+              <div className="min-w-0"><div className="text-[16px] font-extrabold leading-tight">{v.name}</div><div className="truncate text-[13px] text-white/50">{v.org}</div></div>
+              {v.tone === 'concern' && <span className="shrink-0 rounded-full bg-amber-300/15 px-2 py-0.5 text-[12px] font-bold text-amber-200">ملاحظة</span>}
+            </div>
+          </Item>
+        ))}
+      </Stagger>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl border border-teal/25 bg-teal/[0.06] px-4 py-2.5">
+        <span className="text-[16px] font-extrabold text-teal-300">ماذا تعلّمنا:</span>
+        {VOICES.learned.map((l) => <span key={l.q} className="text-[15px] text-white/80"><b className="text-white">{l.q}</b> ← {l.a}</span>)}
+      </div>
+    </div>
+  );
+}
+
+export default function N07Validation() {
+  const [tab, setTab] = useState<'validation' | 'voices' | 'market'>('validation');
+  return (
+    <SlideFrame meta={SLIDES[5]} title={tab === 'validation' ? 'المشكلة ليست افتراضًا… وهذه خطة إثباتها.' : tab === 'voices' ? VOICES.headline : 'نبدأ من الجامعات العُمانية… ونبني نموذجًا قابلًا للتوسع.'} accent={['إثباتها.', 'قابلًا', 'للتوسع.', 'رِفد؟']}
+      aside={<SlideTabs tabs={[['validation', 'التحقق'], ['voices', 'آراء الطلاب'], ['market', 'حجم السوق']] as const} value={tab} onChange={setTab} />}>
+      {tab === 'validation' && <ValidationPanel />}
+      {tab === 'voices' && <VoicesPanel />}
+      {tab === 'market' && <S07Market bare />}
     </SlideFrame>
   );
 }

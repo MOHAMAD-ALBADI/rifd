@@ -5,7 +5,7 @@ These facts are **missing on purpose**. Nothing was invented. Each one lives in 
 | # | Item | Where | Slide | Priority |
 |---|---|---|---|---|
 | 1 | Team: confirm spelling of names | `TEAM.members` | 06 | Three members set (Shahab Al-Kaabi — Founder & CEO, Abdullah Al-Maamari — CTO, Al-Waleed Al-Omairi — COO); roles are the proposed allocation. |
-| 2 | Interview / survey results | `VALIDATION` (currently a plan with target samples, marked "مخطط") | 07 | High. Replace the plan with real numbers once collected. |
+| 2 | Interview / survey results | `VALIDATION`, `VOICES` | 06 | 8 student opinions supplied by the team are shown in the «آراء الطلاب» tab. Keep each person's consent and the original messages in case judges ask. Add survey numbers once collected. |
 | 3 | Funding or support amount for the ask | `TEAM.asks` | 09 | Optional. |
 | 4 | Pilot university (with a letter of interest) | `VISION[0]` / `ROADMAP` | 09 | Optional. |
 | 5 | Real prices and costs | `FINANCE` | 04 | The 5-year finance model is an assumption scenario (break-even around year 4). It counts 3 of the 5 canvas revenue streams (marketplace commission, university subscriptions, Digital Institute); company-project fees and setup fees are not included. Confirm whether to add them. |
